@@ -76,8 +76,7 @@ public class MongoCrontroller {
         int skip = (pageNum - 1) * limitNum;
         //构造分页查询语句
         query.skip(skip).limit(limitNum);
-        List<Baike> list = mongoTemplate.find(query, Baike.class);
-        return list;
+        return mongoTemplate.find(query, Baike.class);
     }
 
 }

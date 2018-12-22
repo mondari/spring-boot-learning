@@ -5,7 +5,10 @@ package com.mondari.springbootmongodb.entity;
  */
 public class Baike {
     private String id;
-    private String name;
+    private String name;//名称
+    private String brand;//品牌
+    private String model;//型号
+    private String price;//价格
 
     public String getId() {
         return id;
