@@ -39,8 +39,8 @@ public class MongoCrontroller {
     public @ResponseBody
     String updateMulti(@PathVariable String id, String name) {
         Criteria criteria = Criteria.where("id").is(id);
-        Update update = Update.update("name", name);
-        // updateFirst：更新第一条匹配的数据；updateMulti：更新所有匹配的数据
+        Update update = Update.update("name", name);// 内部实现：Update update = new Update().set("name", name)
+        // updateFirst()：更新第一条匹配的数据；updateMulti()：更新所有匹配的数据
         UpdateResult result = mongoTemplate.updateMulti(Query.query(criteria), update, Baike.class);
         return result.toString();
     }
@@ -54,22 +54,29 @@ public class MongoCrontroller {
         return baike;
     }
 
-    @ApiOperation("查找对象ById")
+    @ApiOperation("根据ID查找一个对象")
     @GetMapping("/baike/{id}")
     public Baike findBaikeById(@PathVariable String id) {
         return mongoTemplate.findById(id, Baike.class, "baike");
     }
 
-    @ApiOperation("查找对象ByName")
+    @ApiOperation("根据名称查找一个对象")
     @GetMapping("/baike/{name}")
-    public List<Baike> queryBaikeByName(String name) {
+    public Baike queryBaikeByName(String name) {
+        Criteria criteria = Criteria.where("name").is(name);
+        return mongoTemplate.findOne(Query.query(criteria), Baike.class);
+    }
+
+    @ApiOperation("根据名称查找多个对象")
+    @GetMapping("/baikes/{name}")
+    public List<Baike> queryBaikesByName(String name) {
         Criteria criteria = Criteria.where("name").is(name);
         return mongoTemplate.find(Query.query(criteria), Baike.class);
     }
 
     @ApiOperation("分页查询")
     @GetMapping("/baikes/{pageNum}/{limitNum}")
-    public List<Baike> findBaikes(@PathVariable int pageNum, @PathVariable int limitNum) {
+    public List<Baike> queryBaikes(@PathVariable int pageNum, @PathVariable int limitNum) {
         Criteria criteria = new Criteria();
         Query query = Query.query(criteria);
         //跳过个数
