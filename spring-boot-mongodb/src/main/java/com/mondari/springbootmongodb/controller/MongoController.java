@@ -54,8 +54,7 @@ public class MongoController {
      */
     @ApiOperation("修改对象")
     @PutMapping("/baike/{id}")
-    public @ResponseBody
-    String updateMulti(@PathVariable String id, String name) {
+    public String updateMulti(@PathVariable String id, String name) {
         Criteria criteria = Criteria.where("id").is(id);
         Update update = Update.update("name", name);// 内部实现：Update update = new Update().set("name", name)
         // updateFirst()：更新第一条匹配的数据；updateMulti()：更新所有匹配的数据
