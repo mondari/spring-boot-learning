@@ -13,13 +13,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * MongoCrontroller
+ * MongoController
  */
 @RestController
-public class MongoCrontroller {
-    @Autowired
+public class MongoController {
+    private final
     MongoTemplate mongoTemplate;
 
+    @Autowired
+    public MongoController(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    /**
+     * 注意下面两个POST请求的参数都不要加“@RequestBody”注解。这表明是query参数，但是和加“@RequestParam”还是有区别的，因为Baike是个实体类。
+     *
+     * @param baike
+     * @return
+     */
     @ApiOperation("插入对象")
     @PostMapping("/baike/insert")
     public Baike insertBaike(Baike baike) {
@@ -34,6 +45,13 @@ public class MongoCrontroller {
         return baike;
     }
 
+    /**
+     * 参数name虽然没加注解“@RequestParam”，但是默认还是query参数
+     *
+     * @param id
+     * @param name
+     * @return
+     */
     @ApiOperation("修改对象")
     @PutMapping("/baike/{id}")
     public @ResponseBody
@@ -46,8 +64,8 @@ public class MongoCrontroller {
     }
 
     @ApiOperation("删除对象")
-    @DeleteMapping("/baike/{name}")
-    public Baike removeBaike(@PathVariable String name) {
+    @DeleteMapping("/baike")
+    public Baike removeBaike(@RequestParam String name) {
         Baike baike = new Baike();
         baike.setName(name);
         mongoTemplate.remove(baike, "baike");
@@ -55,28 +73,28 @@ public class MongoCrontroller {
     }
 
     @ApiOperation("根据ID查找一个对象")
-    @GetMapping("/baike/{id}")
-    public Baike findBaikeById(@PathVariable String id) {
+    @GetMapping("/findById")
+    public Baike findBaikeById(@RequestParam String id) {
         return mongoTemplate.findById(id, Baike.class, "baike");
     }
 
     @ApiOperation("根据名称查找一个对象")
-    @GetMapping("/baike/{name}")
-    public Baike queryBaikeByName(String name) {
+    @GetMapping("/findOne")
+    public Baike queryBaikeByName(@RequestParam String name) {
         Criteria criteria = Criteria.where("name").is(name);
         return mongoTemplate.findOne(Query.query(criteria), Baike.class);
     }
 
     @ApiOperation("根据名称查找多个对象")
-    @GetMapping("/baikes/{name}")
-    public List<Baike> queryBaikesByName(String name) {
+    @GetMapping("/find")
+    public List<Baike> queryBaikesByName(@RequestParam String name) {
         Criteria criteria = Criteria.where("name").is(name);
         return mongoTemplate.find(Query.query(criteria), Baike.class);
     }
 
     @ApiOperation("分页查询")
-    @GetMapping("/baikes/{pageNum}/{limitNum}")
-    public List<Baike> queryBaikes(@PathVariable int pageNum, @PathVariable int limitNum) {
+    @GetMapping("/baikes")
+    public List<Baike> queryBaikes(@RequestParam int pageNum, @RequestParam int limitNum) {
         Criteria criteria = new Criteria();
         Query query = Query.query(criteria);
         //跳过个数
