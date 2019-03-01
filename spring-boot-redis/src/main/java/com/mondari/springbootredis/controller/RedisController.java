@@ -28,8 +28,8 @@ public class RedisController {
      * @param value
      * @return
      */
-    @PostMapping("/setOne")
-    public String setOne(String key, String value) {
+    @PostMapping("/value")
+    public String setValue(String key, String value) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value);
         return valueOperations.get(key);
@@ -41,8 +41,8 @@ public class RedisController {
      * @param key
      * @return
      */
-    @GetMapping("/getOne")
-    public String getOne(String key) {
+    @GetMapping("/value")
+    public String getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
@@ -54,7 +54,7 @@ public class RedisController {
      * @param hashValue
      * @return
      */
-    @PostMapping("/setHash")
+    @PostMapping("/hash")
     public Map<Object, Object> setHash(String hashName, String hashKey, String hashValue) {
         redisTemplate.opsForHash().put(hashName, hashKey, hashValue);
         return redisTemplate.opsForHash().entries(hashName);
@@ -66,7 +66,7 @@ public class RedisController {
      * @param hashName
      * @return
      */
-    @GetMapping("/getHash")
+    @GetMapping("/hash")
     public Map<Object, Object> getHash(String hashName) {
         return redisTemplate.opsForHash().entries(hashName);
     }
@@ -78,7 +78,7 @@ public class RedisController {
      * @param value
      * @return
      */
-    @PostMapping("/setList")
+    @PostMapping("/list")
     public List<String> setList(String key, String value) {
         ListOperations<String, String> listOperations = redisTemplate.opsForList();
         listOperations.rightPush(key, value);
@@ -91,7 +91,7 @@ public class RedisController {
      * @param key
      * @return
      */
-    @GetMapping("/getList")
+    @GetMapping("/list")
     public List<String> getList(String key) {
         ListOperations<String, String> listOperations = redisTemplate.opsForList();
         return listOperations.range(key, 0, -1);
