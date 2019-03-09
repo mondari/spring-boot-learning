@@ -1,5 +1,7 @@
 package com.mondari.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 书本
  */
@@ -9,6 +11,17 @@ public class Book {
     private String writer;//作者
     private String press;//出版社
     private Double price;//价格(用Float类型会导致精度问题)
+
+    public Book() {
+    }
+
+    public Book(String id, String name, String writer, String press, Double price) {
+        this.id = id;
+        this.name = name;
+        this.writer = writer;
+        this.press = press;
+        this.price = price;
+    }
 
     public String getId() {
         return id;

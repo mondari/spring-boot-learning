@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,15 +35,26 @@ public class MongoController {
     @ApiOperation("插入对象")
     @PostMapping("/book/insert")
     public Book insertOne(Book book) {
-        mongoTemplate.insert(book, "book");
-        return book;
+        return mongoTemplate.insert(book, "book");
     }
 
     @ApiOperation("插入或更新对象")
     @PostMapping("/book/save")
     public Book saveOne(Book book) {
-        mongoTemplate.save(book, "book");
-        return book;
+        return mongoTemplate.save(book, "book");
+    }
+
+    @ApiOperation("批量插入")
+    @PostMapping("/book/insertMulti")
+    public Collection<Book> insertMulti(@RequestBody List<Book> books) {
+        return mongoTemplate.insertAll(books);
+
+        // 另外一种方法：
+        // BulkOperations.BulkMode.UNORDERED 是并行模式
+//        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Book.class, "book");
+//        bulkOps.insert(books);
+//        bulkOps.execute();
+//        return books;
     }
 
     @ApiOperation("更新对象")
