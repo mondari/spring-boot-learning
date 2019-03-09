@@ -1,6 +1,6 @@
 package com.mondari.config;
 
-import com.mondari.AOPApplication;
+import com.mondari.MybatisApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,14 +18,14 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(AOPApplication.class.getPackage().getName()))
+                .apis(RequestHandlerSelectors.basePackage(MybatisApplication.class.getPackage().getName()))
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 页面标题
-                .title("Spring Boot AOP")
+                .title("Spring Boot MyBatis")
                 .build();
     }
 }
