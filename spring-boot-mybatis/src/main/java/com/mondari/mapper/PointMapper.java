@@ -1,12 +1,14 @@
 package com.mondari.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mondari.domain.Point;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
-public interface PointMapper {
+public interface PointMapper extends BaseMapper<Point> {
+    int batchInsert(List<Point> pointList);
 
-    Point selectById(int id);
-
-    int insertOne(Point point);
+    int batchUpdate(List<Point> pointList);
 }

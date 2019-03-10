@@ -3,14 +3,35 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mondari.mapper.PointMapper">
-    <insert id="insertOne" parameterType="Point">
-        insert into db_example.point (name, x, y, z)
-        values (#{name}, #{x}, #{y}, #{z});
+    <insert id="batchInsert">
+        insert into db_example.point (`name`, x, y, z)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name}, #{item.x}, #{item.y}, #{item.z})
+        </foreach>
     </insert>
-
-    <select id="selectById" resultType="com.mondari.domain.Point">
+    <update id="batchUpdate">
+        update db_example.point set
+        `x` =
+        <foreach collection="list" item="item" open="case `name`" separator=" " close="end,">
+            when #{item.name} then #{item.x}
+        </foreach>
+        `y` =
+        <foreach collection="list" item="item" open="case `name`" separator=" " close="end,">
+            when #{item.name} then #{item.y}
+        </foreach>
+        `z` =
+        <foreach collection="list" item="item" open="case `name`" separator=" " close="end">
+            when #{item.name} then #{item.z}
+        </foreach>
+        where
+        `name` in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.name}
+        </foreach>
+    </update>
+    <select id="batchSelect" resultType="com.mondari.domain.Point">
         select *
-        from db_example.point
-        where id = #{id};
+        from db_example.point;
     </select>
 </mapper>
