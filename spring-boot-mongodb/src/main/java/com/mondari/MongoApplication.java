@@ -10,7 +10,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
 @SpringBootApplication
 public class MongoApplication {
 
@@ -18,20 +17,5 @@ public class MongoApplication {
         SpringApplication.run(MongoApplication.class, args);
     }
 
-    @Bean
-    public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(MongoApplication.class.getPackage().getName() + ".controller"))
-                .build();
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                // 页面标题
-                .title("Spring Boot MongoDB")
-                .build();
-    }
 }
 

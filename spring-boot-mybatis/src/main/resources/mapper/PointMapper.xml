@@ -30,8 +30,4 @@
             #{item.name}
         </foreach>
     </update>
-    <select id="batchSelect" resultType="com.mondari.domain.Point">
-        select *
-        from db_example.point;
-    </select>
 </mapper>
