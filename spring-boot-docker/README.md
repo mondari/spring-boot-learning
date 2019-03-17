@@ -16,6 +16,9 @@ PS：
 ## Docker 基本命令：
 
 `docker ps` 查看运行的容器
+
 `docker stop CONTAINER_ID` 停止运行的容器
+
 `docker rm CONTAINER_ID` 删除容器
+
 `docker rmi IMAGE_ID` 删除镜像
