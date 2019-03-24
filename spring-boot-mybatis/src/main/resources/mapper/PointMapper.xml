@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mondari.mapper.PointMapper">
+    <!--批量插入-->
     <insert id="batchInsert">
         insert into db_example.point (`name`, x, y, z)
         values
@@ -10,6 +11,7 @@
             (#{item.name}, #{item.x}, #{item.y}, #{item.z})
         </foreach>
     </insert>
+    <!--批量更新-->
     <update id="batchUpdate">
         update db_example.point set
         `x` =
@@ -30,4 +32,12 @@
             #{item.name}
         </foreach>
     </update>
+    <!--批量删除-->
+    <delete id="batchDelete">
+        delete from db_example.point
+        where `name` in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.name}
+        </foreach>
+    </delete>
 </mapper>

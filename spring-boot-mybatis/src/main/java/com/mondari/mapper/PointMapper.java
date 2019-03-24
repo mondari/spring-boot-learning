@@ -11,4 +11,6 @@ public interface PointMapper extends BaseMapper<Point> {
     int batchInsert(List<Point> pointList);
 
     int batchUpdate(List<Point> pointList);
+
+    int batchDelete(List<Point> pointList);
 }
