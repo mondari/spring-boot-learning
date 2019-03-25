@@ -51,7 +51,7 @@
                     <tag>${project.version}</tag>
                     <!--Dockerfile的构建变量-->
                     <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
             </plugin>
