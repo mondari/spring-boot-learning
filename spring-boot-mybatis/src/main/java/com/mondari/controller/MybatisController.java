@@ -14,11 +14,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+@Validated
 @RestController
 public class MybatisController {
 
@@ -70,29 +73,28 @@ public class MybatisController {
 
     @ApiOperation("分页批量插入")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "0", required = true, dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "-1", required = true, dataType = "int", paramType = "query")
     })
     @PostMapping("points")
-    public int batchInsert(@RequestBody List<Point> pointList, int pageSize) {
+    public int batchInsert(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
         return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchInsert);
     }
 
     @ApiOperation("分页批量更新")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "0", required = true, dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "-1", required = true, dataType = "int", paramType = "query")
     })
     @PutMapping("points")
-    public int batchUpdate(@RequestBody List<Point> pointList, int pageSize) {
-
+    public int batchUpdate(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
         return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchUpdate);
     }
 
     @ApiOperation("分页批量删除")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "0", required = true, dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "-1", required = true, dataType = "int", paramType = "query")
     })
     @DeleteMapping("points")
-    public int batchDelete(@RequestBody List<Point> pointList, int pageSize) {
+    public int batchDelete(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
         return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchDelete);
     }
 
@@ -110,7 +112,7 @@ public class MybatisController {
 
     @ApiOperation("分页查询（使用PageHelper）")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "0", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "-1", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "分页大小", defaultValue = "0", required = true, dataType = "int", paramType = "query")
     })
     @GetMapping("points/v2")
