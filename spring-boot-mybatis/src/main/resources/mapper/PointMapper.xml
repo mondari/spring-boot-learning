@@ -13,19 +13,30 @@
     </insert>
     <!--批量更新-->
     <update id="batchUpdate">
-        update db_example.point set
-        `x` =
-        <foreach collection="list" item="item" open="case `name`" separator=" " close="end,">
-            when #{item.name} then #{item.x}
-        </foreach>
-        `y` =
-        <foreach collection="list" item="item" open="case `name`" separator=" " close="end,">
-            when #{item.name} then #{item.y}
-        </foreach>
-        `z` =
-        <foreach collection="list" item="item" open="case `name`" separator=" " close="end">
-            when #{item.name} then #{item.z}
-        </foreach>
+        update db_example.point
+        <set>
+            <trim prefix="`x` = case `name`" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.x != null">
+                        when #{item.name} then #{item.x}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="`y` = case `name`" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.y != null">
+                        when #{item.name} then #{item.y}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="`z` = case `name`" suffix="end">
+                <foreach collection="list" item="item">
+                    <if test="item.z != null">
+                        when #{item.name} then #{item.z}
+                    </if>
+                </foreach>
+            </trim>
+        </set>
         where
         `name` in
         <foreach collection="list" item="item" open="(" separator="," close=")">
