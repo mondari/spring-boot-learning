@@ -77,7 +77,7 @@ public class MybatisController {
     })
     @PostMapping("points")
     public int batchInsert(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
-        return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchInsert);
+        return pointDao.pageBatchOperate(pointList, pointMapper, pageSize, PointMapper::batchInsert);
     }
 
     @ApiOperation("分页批量更新")
@@ -86,7 +86,7 @@ public class MybatisController {
     })
     @PutMapping("points")
     public int batchUpdate(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
-        return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchUpdate);
+        return pointDao.pageBatchOperate(pointList, pointMapper, pageSize, PointMapper::batchUpdate);
     }
 
     @ApiOperation("分页批量删除")
@@ -95,7 +95,7 @@ public class MybatisController {
     })
     @DeleteMapping("points")
     public int batchDelete(@RequestBody @NotEmpty List<Point> pointList, int pageSize) {
-        return pointDao.pageBatchOperate(pointList, pageSize, PointMapper::batchDelete);
+        return pointDao.pageBatchOperate(pointList, pointMapper, pageSize, PointMapper::batchDelete);
     }
 
     @ApiOperation("分页查询（使用MyBatis-Plus）")

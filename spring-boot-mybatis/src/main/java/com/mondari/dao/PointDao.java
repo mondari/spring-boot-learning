@@ -1,20 +1,14 @@
 package com.mondari.dao;
 
-import com.mondari.domain.Point;
-import com.mondari.mapper.PointMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.function.BiFunction;
 
 @Component
 public class PointDao {
-
-    @Resource
-    private PointMapper pointMapper;
 
     /**
      * 分页批量操作（增删改）
@@ -33,13 +27,13 @@ public class PointDao {
      * @return
      */
     @Transactional
-    public int pageBatchOperate(List<Point> dataList, int pageSize, BiFunction<PointMapper, List<Point>, Integer> function) {
+    public <T, U> int pageBatchOperate(List<T> dataList, U mapper, int pageSize, BiFunction<U, List<T>, Integer> function) {
         if (CollectionUtils.isEmpty(dataList)) {
             return 0;
         }
         if (pageSize <= 0) {
             // 分页大小不为0，则不分页
-            return function.apply(pointMapper, dataList);
+            return function.apply(mapper, dataList);
         }
 
         int dataSize = dataList.size();
@@ -48,8 +42,8 @@ public class PointDao {
         for (int i = 0; i < pages; i++) {
             int fromIndex = pageSize * i;
             int toIndex = pageSize * (i + 1);
-            List<Point> subList = dataList.subList(fromIndex, toIndex > dataSize ? dataSize : toIndex);
-            successCount += function.apply(pointMapper, subList);
+            List<T> subList = dataList.subList(fromIndex, toIndex > dataSize ? dataSize : toIndex);
+            successCount += function.apply(mapper, subList);
         }
         return successCount;
     }
