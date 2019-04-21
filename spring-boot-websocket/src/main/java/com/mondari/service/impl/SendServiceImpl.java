@@ -1,5 +1,6 @@
-package com.mondari;
+package com.mondari.service.impl;
 
+import com.mondari.service.SendService;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.Session;

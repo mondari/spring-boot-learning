@@ -1,4 +1,4 @@
-package com.mondari;
+package com.mondari.service;
 
 import javax.websocket.Session;
 import java.io.IOException;

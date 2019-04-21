@@ -1,5 +1,7 @@
-package com.mondari;
+package com.mondari.websocket;
 
+import com.mondari.service.SendService;
+import com.mondari.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,8 +19,8 @@ public class MyWebSocket {
     // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
-//    //注入Service只能使用这种方式
-//    private SendService sendService = SpringUtils.getBean(SendService.class);
+    // 注入 Service 只能使用 getApplicationContext().getBean() 这种方式
+    private SendService sendService = SpringUtils.getBean(SendService.class);
 
     /**
      * 连接建立成功调用的方法
@@ -34,8 +36,13 @@ public class MyWebSocket {
      */
     @OnClose
     public void onClose(Session session) {
-        subOnlineCount();   //在线人数减1
-        logger.info("有一连接关闭，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
+        try {
+            session.close();
+            subOnlineCount();   //在线人数减1
+            logger.info("有一连接关闭，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
+        } catch (IOException e) {
+            logger.error("关闭session时出错 {}", e);
+        }
     }
 
     /**
@@ -49,19 +56,11 @@ public class MyWebSocket {
         String id = session.getId();
         logger.info("来自客户端ID为 {} 的消息：{}", id, message);
         try {
-            session.getBasicRemote().sendText("服务器收到消息");
+            sendService.sendMessage(session, "服务器收到消息");
         } catch (IOException e) {
             logger.error("发送消息给客户端 {} 失败 {}", id, e);
         }
 
-//        //群发消息
-//        for (MyWebSocket item : webSocketSet) {
-//            try {
-//                item.sendMessage(message);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     /**
