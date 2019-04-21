@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value = "/websocket")
 @Component
@@ -16,17 +17,26 @@ public class MyWebSocket {
 
     private Logger logger = LoggerFactory.getLogger(MyWebSocket.class);
 
+    // 注入 Service 只能使用 getApplicationContext().getBean() 这种方式
+    private SendService sendService = SpringUtils.getBean(SendService.class);
+
     // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
-    // 注入 Service 只能使用 getApplicationContext().getBean() 这种方式
-    private SendService sendService = SpringUtils.getBean(SendService.class);
+    //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+    private static CopyOnWriteArraySet<MyWebSocket> webSocketSet = new CopyOnWriteArraySet<>();
+
+    //与某个客户端的连接会话，需要通过它来给客户端发送数据
+    private Session session;
 
     /**
      * 连接建立成功调用的方法
      */
     @OnOpen
     public void onOpen(Session session) {
+        this.session = session;
+        webSocketSet.add(this); //加入set中
+
         addOnlineCount();   // 在线人数加1
         logger.info("有新连接加入，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
     }
@@ -38,6 +48,7 @@ public class MyWebSocket {
     public void onClose(Session session) {
         try {
             session.close();
+            webSocketSet.remove(this);  //从set中删除
             subOnlineCount();   //在线人数减1
             logger.info("有一连接关闭，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
         } catch (IOException e) {
@@ -61,6 +72,8 @@ public class MyWebSocket {
             logger.error("发送消息给客户端 {} 失败 {}", id, e);
         }
 
+        // 群发消息
+        sendBatch("ID为 " + id + " 的客户端发送了消息");
     }
 
     /**
@@ -72,6 +85,29 @@ public class MyWebSocket {
     @OnError
     public void onError(Session session, Throwable error) {
         logger.error("客户端ID为 {} 的连接发生错误：{}", session.getId(), error);
+    }
+
+    /**
+     * 发送消息
+     * @param message
+     * @throws IOException
+     */
+    private void sendMessage(String message) throws IOException {
+        this.session.getBasicRemote().sendText(message);
+    }
+
+
+    /**
+     * 群发消息
+     * */
+    private void sendBatch(String message) {
+        for (MyWebSocket item : webSocketSet) {
+            try {
+                item.sendMessage(message);
+            } catch (IOException e) {
+                logger.error("群发消息出错 {}", e);
+            }
+        }
     }
 
     private static synchronized int getOnlineCount() {
