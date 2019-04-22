@@ -1,8 +1,4 @@
 # spring-boot-websocket
 
-参考：
-
-https://github.com/sunlongv587/spring-boot-websocket-demo
-
-https://www.cnblogs.com/bianzy/p/5822426.html
+启动服务，打开浏览器，访问 `http://localhost:8080/`
 

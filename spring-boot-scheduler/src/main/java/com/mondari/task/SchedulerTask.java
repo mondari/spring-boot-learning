@@ -12,7 +12,7 @@ import java.util.Date;
 @Component
 public class SchedulerTask {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
     private int count = 0;
 
     /**
@@ -20,7 +20,7 @@ public class SchedulerTask {
      */
     @Scheduled(fixedRate = 1000)
     public void reportCurrentTime() {
-        System.out.println("现在是北京时间：" + dateFormat.format(new Date()));
+        System.out.println("现在是北京时间：" + DATE_FORMAT.format(new Date()));
     }
 
     /**

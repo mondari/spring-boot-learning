@@ -26,7 +26,7 @@ public class PointDao {
      * @param function 函数式接口
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public <T, U> int pageBatchOperate(List<T> dataList, U mapper, int pageSize, BiFunction<U, List<T>, Integer> function) {
         if (CollectionUtils.isEmpty(dataList)) {
             return 0;
