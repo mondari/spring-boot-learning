@@ -47,7 +47,7 @@ public class MybatisController {
 
     @ApiOperation("插入一个")
     @PostMapping("point")
-    public Point insertOne(Point point) {
+    public Point insertOne(@Validated({Point.Insert.class}) Point point) {
         pointMapper.insert(point);
         return point;
     }
