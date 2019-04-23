@@ -7,7 +7,7 @@
 - 手写 Mapper 完成批量插入、删除和更新功能，同时新增 Java 8 函数式编程的方法封装分页批量操作（增删改），应付海量数据导致 SQL 语句过长的问题
 - 使用 `@Transactional` 注解实现事务功能（针对分页批量增删改）
 - 使用 Alibaba Druid 监控数据源
-- 使用 @Validated 相关注解进行 Controller 入参校验
+- 使用 @Validated 相关注解进行方法入参校验和Bean校验
 - 增加全局异常处理类
 
 
