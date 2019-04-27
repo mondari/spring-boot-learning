@@ -10,7 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import retrofit2.Call;
@@ -19,15 +23,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SpringBootApplication
 public class RestApplication {
 
-    private static Logger logger = LoggerFactory.getLogger(RestTemplate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestTemplate.class);
     private static final String ROOT_URI = "http://localhost:8080";
+    private static final String GITHUB_API_URL = "https://api.github.com/";
 
     public static void main(String[] args) {
         SpringApplication.run(RestApplication.class, args);
@@ -36,6 +39,16 @@ public class RestApplication {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.rootUri(ROOT_URI).build();
+    }
+
+    /**
+     * 弃用，这里只演示一下使用方法
+     *
+     * @return
+     */
+    @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
     }
 
     /**
@@ -57,41 +70,56 @@ public class RestApplication {
     @Bean
     public Retrofit retrofit() {
         return new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
+                .baseUrl(GITHUB_API_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }
 
     @Bean
-    public CommandLineRunner run(RestTemplate restTemplate, WebClient client, Retrofit retrofit) {
+    public CommandLineRunner run(RestTemplate restTemplate, WebClient client, Retrofit retrofit, AsyncRestTemplate asyncRestTemplate) {
         return args -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("name", "Newton");
+            String username = "mondari";
 
-            logger.info("----restTemplate----");
-            logger.info("GET: {}", restTemplate.getForObject("/hello/{name}", String.class, map));
-            logger.info("GET: {}", restTemplate.getForObject("/hello/{name}", String.class, "Einstein"));
-            logger.info("POST: {}", restTemplate.postForObject("/person", new Person("Vinci", 50), Person.class));
+            // RestTemplate 请求
+            LOG.info("RestTemplate-get-query: {}", restTemplate.getForObject("/hello?name={0}&old={1}", Person.class, "Newton", 23));
+            LOG.info("RestTemplate-get-path: {}", restTemplate.getForObject("/hello/{name}/{old}", Person.class, "Einstein", 23));
+            LOG.info("RestTemplate-POST: {}", restTemplate.postForObject("/person", new Person("Vinci", 50), Person.class));
 
-            logger.info("----WebClient----");
-            logger.info("Sync-GET: {}", client.get().uri("hello/{name}", "Plonk").retrieve().bodyToMono(String.class).block());
-            logger.info("Sync-POST: {}", client.post().uri("/person").syncBody(new Person("Darwin", 34)).retrieve().bodyToMono(Person.class).block());
+            // WebClient 请求
+            client.get().uri("hello/{name}/{old}", "Plonk", 32).retrieve().bodyToMono(Person.class)
+                    .subscribe(s -> LOG.info("WebClient-GET: {}", s));
+            client.post().uri("/person").syncBody(new Person("Darwin", 34)).retrieve().bodyToMono(Person.class)
+                    .subscribe(person -> LOG.info("WebClient-POST: {}", person));
 
-            logger.info("----Retrofit----");
+            // AsyncRestTemplate 请求
+            ListenableFuture<ResponseEntity<String>> entity = asyncRestTemplate
+                    .getForEntity("https://api.github.com/users/{user}/repos", String.class, "mondari");
+            entity.addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
+                @Override
+                public void onFailure(Throwable ex) {
+                    LOG.info("AsyncRestTemplate-GET: {}", ex.getMessage());
+                }
+
+                @Override
+                public void onSuccess(ResponseEntity<String> result) {
+                    LOG.info("AsyncRestTemplate-GET: {}", result.getBody());
+                }
+            });
+
+            // Retrofit 的返回结果支持泛型，非常方便
             GitHubService gitHubService = retrofit.create(GitHubService.class);
-            Call<List<Repo>> call = gitHubService.listRepos("mondari");
+            Call<List<Repo>> call = gitHubService.listRepos(username);
             call.enqueue(new Callback<List<Repo>>() {
                 @Override
                 public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
-                    logger.info("Async-GET: {}", response.body());
+                    LOG.info("Retrofit-GET: {}", response.body());
                 }
 
                 @Override
                 public void onFailure(Call<List<Repo>> call, Throwable t) {
-                    logger.info(t.getMessage());
+                    LOG.info("Retrofit-GET: {}", t.getMessage());
                 }
             });
-//            logger.info("Sync-GET: {}", call.execute().body());
 
         };
     }

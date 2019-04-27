@@ -2,6 +2,9 @@ package com.mondari.domain;
 
 import lombok.Data;
 
+/**
+ * HTTP 请求返回结果
+ */
 @Data
 public class ResponseResult {
     /**
