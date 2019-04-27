@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -27,6 +28,17 @@ public class RestApplication {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.rootUri(ROOT_URI).build();
+    }
+
+    /**
+     * RestTemplate 默认使用 java.net.HttpURLConnection 来进行发起HTTP请求，
+     * 可以切换到支持HTTP2.0的OkHttp3库
+     *
+     * @return
+     */
+    @Bean
+    public RestTemplate okHttpRestTemplate(RestTemplateBuilder builder) {
+        return builder.requestFactory(OkHttp3ClientHttpRequestFactory::new).rootUri(ROOT_URI).build();
     }
 
     @Bean
