@@ -1,24 +1,33 @@
 package com.mondari.domain;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * HTTP 请求返回结果
  */
 @Data
-public class ResponseResult {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResponseResult<T> {
     /**
      * 状态码
      */
+    @JsonAlias({"status", "statusCode"})
     private int code;
+
     /**
      * 信息
      */
+    @JsonAlias({"msg"})
     private String message;
+
     /**
      * 数据
      */
-    private Object data;
+    private T data;
 
     public ResponseResult(int code, String message) {
         this.code = code;
