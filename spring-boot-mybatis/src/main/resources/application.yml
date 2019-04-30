@@ -1,0 +1,39 @@
+## 日志配置 ##
+#logging:
+#  level:
+#    root: debug
+
+spring:
+  ## 数据源配置 ##
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_example?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: toor
+    type: com.alibaba.druid.pool.DruidDataSource
+
+## MyBatis 配置 ##
+mybatis:
+  # Maven 多模块项目的扫描路径需以 classpath*: 开头 （意思为加载多个 jar 包下的 XML 文件）
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.mondari.domain
+  configuration:
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    map-underscore-to-camel-case: true
+  # 如果用外部配置文件来配置的话
+  # config-location: classpath:mybatis-config.xml
+
+## MyBatis-Plus 配置 ##
+mybatis-plus:
+  global-config:
+    db-config:
+      # 配置主键ID自增
+      id-type: auto
+
+## PageHelper 分页配置 ##
+pagehelper:
+  helper-dialect: mysql
+  # 分页大小为0时查询所有结果
+  page-size-zero: true
+  # pageNum<=0 时会查询第一页，pageNum>pages（超过总数时），会查询最后一页
+  reasonable: true

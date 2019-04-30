@@ -1,0 +1,5 @@
+#国际化文件放在i18n文件夹，basename为messages
+spring:
+  messages:
+    basename: i18n.messages
+    use-code-as-default-message: true

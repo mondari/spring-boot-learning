@@ -1,0 +1,42 @@
+# info 监控结点的应用信息
+info:
+  app:
+    name: '@project.name@'
+    version: '@project.version@'
+
+management:
+  server:
+    address: 127.0.0.1
+    port: 9000
+  endpoints:
+    web:
+      ## 监控结点访问路径，默认为：/actuator
+      base-path: /monitor
+      exposure:
+        ## 打开web方式访问的所有监控结点，可以通过名称指定
+        ## 默认开启 health 和 info 这两个节点
+        # health：查看应用健康状态
+        # info：显示 ${info.*} 应用信息
+        include: '*'
+        ## 关闭web方式访问的所有监控结点
+        # exclude: '*'
+  endpoint:
+    # shutdown：远程优雅地关闭应用。该结点默认不开启，只能通过以下配置开启
+    shutdown:
+      enabled: true
+    # 是否要显示详细的健康信息，默认是never
+    health:
+      show-details: always
+  health:
+    # management.health.xxx.enabled 用来设置是否监控相应应用的健康状态，默认开启
+    defaults:
+      enabled: true
+    # 可以监控数据库、mongo、redis、磁盘空间使用情况等
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+    mongo:
+      enabled: true
+    redis:
+      enabled: true
