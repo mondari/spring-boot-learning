@@ -1,4 +1,4 @@
-package com.mondari.domain;
+package com.mondari.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

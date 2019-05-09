@@ -1,7 +1,7 @@
 package com.mondari.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mondari.domain.Point;
+import com.mondari.model.Point;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
