@@ -1,6 +1,6 @@
 package com.mondari.controller;
 
-import com.mondari.entity.Book;
+import com.mondari.model.Book;
 import com.mongodb.client.result.UpdateResult;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

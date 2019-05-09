@@ -1,6 +1,4 @@
-package com.mondari.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.mondari.model;
 
 /**
  * 书本

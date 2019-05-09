@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    # 可通过链接 /h2-console 访问 H2 Web控制台
+    # 嵌入式链接，数据库文件保存在本地目录～（家目录）下的 test 文件里
+    url: jdbc:h2:~/test
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: create-drop
