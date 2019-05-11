@@ -6,6 +6,6 @@ spring:
   jpa:
     # 不使用 schema.sql 来初始化数据库，使用JPA来初始化
     generate-ddl: false
-    # 项目启动时创建数据表，项目结束时删除数据表
+    # 初始化数据库方式：项目启动时创建数据表，项目结束时删除数据表
     hibernate:
       ddl-auto: create-drop

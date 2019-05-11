@@ -26,7 +26,7 @@ public class JpaApplication {
             // 添加一堆顾客（主键会自动生成）
             repository.save(new Customer("Jack", "Bauer"));
             repository.save(new Customer("Chloe", "O'Brian"));
-            repository.save(new Customer("Kim", "Bauer"));
+            repository.save(new Customer("Kim", "Pauer"));
             repository.save(new Customer("David", "Palmer"));
             repository.save(new Customer("Michelle", "Dessler"));
 

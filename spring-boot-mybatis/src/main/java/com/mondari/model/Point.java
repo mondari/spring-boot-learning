@@ -26,8 +26,14 @@ public class Point {
     private Double y;
     @NotNull(groups = {Insert.class})
     private Double z;
+    /**
+     * 数据库会自动创建时间
+     */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp createTime;
+    /**
+     * 数据库会自动更新时间
+     */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp updateTime;
 
