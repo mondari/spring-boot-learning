@@ -1,75 +1,33 @@
 package com.mondari.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 /**
  * 书本
  */
+@Data
+@Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Book {
+
+    @ApiModelProperty("书ID")
     private String id;
-    private String name;//名称
-    private String writer;//作者
-    private String press;//出版社
-    private Double price;//价格(用Float类型会导致精度问题)
 
-    public Book() {
-    }
+    @ApiModelProperty("书名")
+    private String name;
 
-    public Book(String id, String name, String writer, String press, Double price) {
-        this.id = id;
-        this.name = name;
-        this.writer = writer;
-        this.press = press;
-        this.price = price;
-    }
+    @ApiModelProperty("作者")
+    private String writer;
 
-    public String getId() {
-        return id;
-    }
+    @ApiModelProperty("出版社")
+    private String press;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public String getPress() {
-        return press;
-    }
-
-    public void setPress(String press) {
-        this.press = press;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", writer='" + writer + '\'' +
-                ", press='" + press + '\'' +
-                ", price='" + price + '\'' +
-                '}';
-    }
-
+    /**
+     * 用 Float 类型会导致精度问题
+     */
+    @ApiModelProperty("价格")
+    private Double price;
 }

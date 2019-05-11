@@ -35,16 +35,6 @@ public class MybatisController {
         this.pointDao = pointDao;
     }
 
-    /**
-     * curl -X GET http://localhost:8080/demo
-     *
-     * @return "hello, world"
-     */
-    @GetMapping("demo")
-    public String demo() {
-        return "hello, world";
-    }
-
     @ApiOperation("插入一个")
     @PostMapping("point")
     public Point insertOne(@Validated({Point.Insert.class}) Point point) {
@@ -118,9 +108,12 @@ public class MybatisController {
     @GetMapping("points/v2")
     public List<Point> findAllV2(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Point> points = pointMapper.selectList(new QueryWrapper<>());  //分页查询结果
-        PageInfo<Point> pageInfo = new PageInfo<>(points);  //包装一下可以获取分页信息
-        return pageInfo.getList();  //这也是分页查询结果
+        //分页查询结果
+        List<Point> points = pointMapper.selectList(new QueryWrapper<>());
+        //包装一下可以获取分页信息
+        PageInfo<Point> pageInfo = new PageInfo<>(points);
+        //这也是分页查询结果
+        return pageInfo.getList();
     }
 
     @ApiOperation("Druid 数据源监控")

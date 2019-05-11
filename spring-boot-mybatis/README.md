@@ -9,6 +9,7 @@
 - 使用 Alibaba Druid 监控数据源
 - 使用 @Validated 相关注解进行方法入参校验和Bean校验
 - 增加全局异常处理类
+- MyBatis Generator 根据数据库表生成POLOs、Mapper、DAO
 
 
 
