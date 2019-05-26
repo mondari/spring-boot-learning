@@ -1,0 +1,4 @@
+jdbc:
+  datasource:
+    username: ${random.value}
+    password: ${random.value}
