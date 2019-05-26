@@ -2,17 +2,28 @@
 #logging:
 #  level:
 #    root: debug
+## 数据源配置 ##
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIxcXp+q48EDTKDmTyHYQ7t6gMJk2n9HfOMtVtPtuFVmGIGtqoikpLEZoRNRFpGPcVpWyXSdwH51XvNFNPXB+/kCAwEAAQ==
 spring:
   jpa:
     # 使用 schema.sql 来初始化数据库
     generate-ddl: true
-  ## 数据源配置 ##
   datasource:
     url: jdbc:mysql://localhost:3306/db_example?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
-    password: toor
+    # password: toor
+    # jasypt 加密后的密码
+    # password: ENC(lefIojh5L05Z8PPJnwYUGQ==)
+    # druid 加密后的密码
+    password: ePDKV2Fo+FRnQvSmFIlDJlBgOad9jpB8XbiPAeMxtqinmHmpATxMNNXvG+YBXM93xGTE0haigD27OS8+FMc6CQ==
     # 打开初始化表的开关，默认使用嵌入式数据库才会开启
     initialization-mode: always
+    # 使用 Druid 数据库密码加密功能需要一下配置
+    druid:
+      connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
+      filter:
+        config:
+          enabled: true
 
 ## MyBatis 配置 ##
 mybatis:
