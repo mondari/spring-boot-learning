@@ -1,7 +1,7 @@
 # spring-boot-restdocs
 
-> 本项目主要演示如何将swagger在线接口文档转换成离线HTML或PDF文档
-> 本项目参考自[spring-swagger2markup-demo](https://github.com/Swagger2Markup/spring-swagger2markup-demo)
+> 介绍如何将swagger在线接口文档转换成离线HTML或PDF文档
+> 参考自[spring-swagger2markup-demo](https://github.com/Swagger2Markup/spring-swagger2markup-demo)
 
 ## 技术栈
 

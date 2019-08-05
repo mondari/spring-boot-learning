@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @SpringBootApplication
-public class AOPApplication {
+public class AopApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AOPApplication.class, args);
+        SpringApplication.run(AopApplication.class, args);
     }
 
     /**
