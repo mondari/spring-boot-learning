@@ -34,12 +34,10 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>${springfox.swagger.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${springfox.swagger.version}</version>
 		</dependency>
 
 		<dependency>
@@ -69,7 +67,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-archetype-plugin</artifactId>
-				<version>3.0.1</version>
 			</plugin>
 		</plugins>
 	</build>

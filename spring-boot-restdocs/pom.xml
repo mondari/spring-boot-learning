@@ -14,12 +14,18 @@
     </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <springfox.swagger.version>2.7.0</springfox.swagger.version>
-
-
+        <!--单元测试生成swagger.json文件的目录-->
+        <swagger.output.dir>${project.build.directory}/swagger</swagger.output.dir>
+        <!--swagger.json文件全路径名，swagger2markup插件的入参-->
+        <swagger.input>${swagger.output.dir}/swagger.json</swagger.input>
+        <!--swagger2markup插件生成AsciiDoc文件的目录-->
+        <generated.asciidoc.directory>${project.build.directory}/asciidoc/generated</generated.asciidoc.directory>
+        <!--index.adoc模板文件的目录，asciidoctor插件的入参-->
+        <asciidoctor.input.directory>${project.basedir}/src/docs/asciidoc</asciidoctor.input.directory>
+        <!--asciidoctor生成HTML文件的目录-->
+        <asciidoctor.html.output.directory>${project.build.directory}/asciidoc/html</asciidoctor.html.output.directory>
+        <!--asciidoctor生成PDF文件的目录-->
+        <asciidoctor.pdf.output.directory>${project.build.directory}/asciidoc/pdf</asciidoctor.pdf.output.directory>
     </properties>
 
     <dependencies>
@@ -27,17 +33,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <!--建议使用2.7.0版本-->
-            <version>${springfox.swagger.version}</version>
         </dependency>
 
         <dependency>
@@ -74,7 +76,6 @@
             <plugin>
                 <groupId>io.github.swagger2markup</groupId>
                 <artifactId>swagger2markup-maven-plugin</artifactId>
-                <version>1.3.3</version>
                 <configuration>
                     <swaggerInput>${swagger.input}</swaggerInput>
                     <outputDir>${generated.asciidoc.directory}</outputDir>
@@ -97,7 +98,6 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.6</version>
                 <!-- 如果要生成PDF，需要添加 asciidoctorj-pdf 依赖 -->
                 <dependencies>
                     <dependency>
@@ -145,7 +145,6 @@
             <!--将生成的HTML和PDF文件复制到static目录打包，项目运行时就能通过/docs/index.html访问-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
