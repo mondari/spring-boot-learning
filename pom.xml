@@ -11,8 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.2.0.RELEASE</version>
     </parent>
 
     <properties>
@@ -20,17 +19,18 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <springfox.swagger.version>2.7.0</springfox.swagger.version>
-        <h2.version>1.4.197</h2.version>
         <lombok.version>1.18.6</lombok.version>
         <retrofit.version>2.5.0</retrofit.version>
         <mybatis-spring-boot-starter.version>1.3.2</mybatis-spring-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.0.5</mybatis-plus-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.2.10</pagehelper-spring-boot-starter.version>
+        <h2.version>1.4.197</h2.version>
         <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
         <jasypt.version>1.9.2</jasypt.version>
         <jasypt-spring-boot-starter.version>2.1.1</jasypt-spring-boot-starter.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <guava.version>27.1-jre</guava.version>
-        <mybatis-plus-boot-starter.version>3.0.5</mybatis-plus-boot-starter.version>
+        <fastjson.version>1.2.62</fastjson.version>
     </properties>
 
     <modules>
@@ -39,6 +39,7 @@
         <module>spring-boot-archetype</module>
         <module>spring-boot-configuration</module>
         <module>spring-boot-docker</module>
+        <module>spring-boot-demo-elasticsearch</module>
         <module>spring-boot-i18n</module>
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
@@ -89,6 +90,12 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-spring-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter-test</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+                <scope>test</scope>
+            </dependency>
             <!--MyBatis-Plus 不能和 通用Mapper 同时存在-->
             <!--升级到新版本会报错，慎重更改版本号-->
             <dependency>
@@ -128,11 +135,11 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter-test</artifactId>
-                <version>${mybatis-spring-boot-starter.version}</version>
-                <scope>test</scope>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
