@@ -22,7 +22,7 @@ import java.util.List;
 public class SpringBootDemoElasticsearchApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootDemoElasticsearchApplication.class, args);
+        SpringApplication.run(SpringBootDemoElasticsearchApplication.class, args).stop();
     }
 
     @Autowired
@@ -45,7 +45,6 @@ public class SpringBootDemoElasticsearchApplication implements CommandLineRunner
     public void insertDataSample() {
 
         repository.deleteAll();
-        restTemplate.refresh(Conference.class);
 
         // Save data sample
         repository.save(Conference.builder().date("2014-11-06").name("Spring eXchange 2014 - London")

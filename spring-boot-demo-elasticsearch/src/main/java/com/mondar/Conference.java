@@ -19,8 +19,7 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
  */
 @Data
 @Builder
-@Document(indexName = "conference-index", type = "geo-class-point-type", shards = 1, replicas = 0,
-        refreshInterval = "-1")
+@Document(indexName = "conference-index", type = "geo-class-point-type")
 public class Conference {
 
     private @Id

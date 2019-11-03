@@ -23,7 +23,7 @@ public class RabbitMQConfig {
 
     @Bean
     DirectExchange exchangeDirect() {
-        return new DirectExchange(EXCHANGE_DIRECT);
+        return new DirectExchange(EXCHANGE_DIRECT, true, false);
     }
 
     @Bean
@@ -38,7 +38,7 @@ public class RabbitMQConfig {
 
     @Bean
     Queue queueFoo() {
-        return new Queue(QUEUE_FOO, false);
+        return new Queue(QUEUE_FOO, true);
     }
 
     @Bean
