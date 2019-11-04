@@ -36,7 +36,6 @@
     <modules>
         <module>spring-boot-actuator</module>
         <module>spring-boot-aop</module>
-        <module>spring-boot-archetype</module>
         <module>spring-boot-configuration</module>
         <module>spring-boot-docker</module>
         <module>spring-boot-demo-elasticsearch</module>
@@ -52,6 +51,36 @@
         <module>spring-boot-websocket</module>
     </modules>
 
+    <!--项目中模块公用的依赖放在这里-->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <!--指定好好依赖项目的版本，到时候直接在项目中引用，不需要加版本号-->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -144,6 +173,14 @@
     </dependencyManagement>
 
     <build>
+        <!--项目中模块公用的插件放在这里-->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -168,6 +205,7 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
     </build>
 
 </project>
