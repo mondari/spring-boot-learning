@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-public class SpringBootDemoElasticsearchApplication implements CommandLineRunner {
+public class ElasticsearchDemoApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootDemoElasticsearchApplication.class, args);
+        SpringApplication.run(ElasticsearchDemoApplication.class, args);
     }
 
     @Autowired
