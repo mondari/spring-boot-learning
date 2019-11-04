@@ -1,4 +1,9 @@
 spring:
+# spring-boot-2.2.x版本使用以下配置方式，不能同时用
   elasticsearch:
     rest:
       uris: http://centos-vm:9200
+# spring-boot-2.1.x版本使用以下配置方式
+#  data:
+#    elasticsearch:
+#      cluster-nodes: localhost:9300

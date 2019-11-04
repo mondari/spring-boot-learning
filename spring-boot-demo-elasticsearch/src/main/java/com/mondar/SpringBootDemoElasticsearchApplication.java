@@ -1,17 +1,13 @@
 package com.mondar;
 
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-import org.springframework.data.elasticsearch.core.query.*;
-import org.springframework.http.converter.json.JsonbHttpMessageConverter;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,7 +18,7 @@ import java.util.List;
 public class SpringBootDemoElasticsearchApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootDemoElasticsearchApplication.class, args).stop();
+        SpringApplication.run(SpringBootDemoElasticsearchApplication.class, args);
     }
 
     @Autowired
@@ -39,6 +35,8 @@ public class SpringBootDemoElasticsearchApplication implements CommandLineRunner
                 new Criteria("keywords").contains(expectedWord).and(new Criteria("date").greaterThanEqual(expectedDate)));
 
         List<Conference> conferenceList = restTemplate.queryForList(query, Conference.class);
+
+        deleteIndex();
     }
 
     @PostConstruct

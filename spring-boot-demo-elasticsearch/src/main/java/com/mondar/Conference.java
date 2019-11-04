@@ -1,16 +1,16 @@
 package com.mondar;
 
-import static org.springframework.data.elasticsearch.annotations.FieldType.*;
-
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+
+import java.util.List;
+
+import static org.springframework.data.elasticsearch.annotations.FieldType.Date;
 
 /**
  * @author Artur Konczak
@@ -19,12 +19,16 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
  */
 @Data
 @Builder
-@Document(indexName = "conference-index", type = "geo-class-point-type")
+@Document(indexName = "conference", type = "geo-class-point-type")
 public class Conference {
 
     private @Id
     String id;
 
+    /**
+     * 踩坑记录：一定要把analyzer放在最前面才能设置mapping分词
+     */
+    @Field(analyzer = "ik_smart", type = FieldType.Text)
     private String name;
 
     private @Field(type = Date)
