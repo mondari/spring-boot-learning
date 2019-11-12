@@ -25,6 +25,17 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-boot-starter.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
+        <!--踩坑记录：需要加入该依赖才能使用 velocity 模板进行自动代码生成-->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.0</version>
+        </dependency>
         <!--分页插件-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -64,11 +75,6 @@
             <artifactId>guava</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-devtools</artifactId>-->
-        <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter-test</artifactId>
