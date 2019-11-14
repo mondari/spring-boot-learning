@@ -1,5 +1,6 @@
 package com.mondari;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -41,9 +42,17 @@ public class CodeGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("limondar");
+        gc.setFileOverride(true);
         gc.setOpen(false);
-        gc.setSwagger2(true);   // 实体属性 Swagger2 注解
+        // 1-> Entity设置
+        gc.setIdType(IdType.AUTO);  // 设置主键类型
+        gc.setSwagger2(true);   // 开启实体属性 Swagger2 注解
 //        gc.setActiveRecord(true);
+        // 2-> Mapper.xml设置
+        gc.setBaseColumnList(true); // 开启通用查询结果列
+        gc.setBaseResultMap(true);  // 开启通用查询映射结果
+        // 3-> Mapper.java设置
+        gc.setMapperName("%sDao");  // 设置自己的命名规则，如果对Mapper.java的名称不满意的话
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -51,7 +60,6 @@ public class CodeGenerator {
         dsc.setUrl("jdbc:mysql://centos-vm2:3306/mall" +
                 "?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8");
         // dsc.setSchemaName("public");
-//        dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("toor");
@@ -59,11 +67,12 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.baomidou.ant");
+        pc.setParent("com.limondar");
+        // pc.setModuleName(scanner("模块名"));
+        pc.setMapper("dao");    // 设置 Mapper.java 包名，默认是放在 mapper 包中
         mpg.setPackageInfo(pc);
 
-//        // 自定义配置
+        // 自定义配置
 //        InjectionConfig cfg = new InjectionConfig() {
 //            @Override
 //            public void initMap() {
@@ -112,19 +121,27 @@ public class CodeGenerator {
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
+        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        // strategy.setTablePrefix(pc.getModuleName() + "_");   // 设置表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
+
+        // -> 设置Entity
         strategy.setEntityLombokModel(true);
+//        strategy.setVersionFieldName("");   // 设置乐观锁字段
+//        strategy.setLogicDeleteFieldName("");   // 设置逻辑删除字段（需要注意逻辑删除和唯一主键会出现冲突的问题，解决问题是加入一个delete_token字段，参考https://www.jianshu.com/p/f37281576585）
+        // -> 设置Controller
         strategy.setRestControllerStyle(true);
-        // 公共父类
-        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
-        // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-        strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setControllerMappingHyphenStyle(true); // 设置驼峰转连字符：@RequestMapping("/managerUserActionHistory") -> @RequestMapping("/manager-user-action-history")
+
+        // 设置 Entity、Mapper、Mapper.xml、Service、ServiceImpl 的父类
+//        strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
+//        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
+//        设置Entity父类公共字段
+//        strategy.setSuperEntityColumns("id");
+
         mpg.setStrategy(strategy);
+
         mpg.setTemplateEngine(new VelocityTemplateEngine());
         mpg.execute();
     }
