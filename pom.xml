@@ -15,9 +15,6 @@
     </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
         <springfox.swagger.version>2.7.0</springfox.swagger.version>
         <lombok.version>1.18.6</lombok.version>
         <retrofit.version>2.5.0</retrofit.version>
