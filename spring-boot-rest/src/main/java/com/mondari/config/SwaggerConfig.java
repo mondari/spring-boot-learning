@@ -85,7 +85,7 @@ public class SwaggerConfig {
                 // 设置安全相关
                 // Sets up the security schemes used to protect the apis.
                 // Supported schemes are ApiKey, BasicAuth and OAuth
-                .securitySchemes(Collections.singletonList(new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name())))
+                .securitySchemes(Collections.singletonList(apiKey()))
                 .securityContexts(newArrayList(securityContext()))
                 ;
     }
@@ -107,8 +107,15 @@ public class SwaggerConfig {
                 .build();
     }
 
+    /**
+     * 点击 Swagger UI 界面中的 Authorize会显示
+     * name: HttpHeaders.AUTHORIZATION 的值
+     * in: In.HEADER.name() 的值
+     * value: 用户输入
+     * @return
+     */
     private ApiKey apiKey() {
-        return new ApiKey("keyName", "api_key", "header");
+        return new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name());
     }
 
     private SecurityContext securityContext() {
@@ -120,22 +127,23 @@ public class SwaggerConfig {
 
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope
-                = new AuthorizationScope("global", "accessEverything");
+                = new AuthorizationScope("global", "description");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return newArrayList(new SecurityReference("mykey", authorizationScopes));
+        return newArrayList(new SecurityReference("reference", authorizationScopes));
     }
 
     @Bean
     SecurityConfiguration security() {
         return new SecurityConfiguration(
-                "client-id",
-                "client-secret",
+                "clientId",
+                "clientSecret",
                 "realm",
                 "appName",
+                // HTTP请求的时候会将 apiKey:apiKeyName 放到 Header 中
                 "apiKey",
                 ApiKeyVehicle.HEADER,
-                "api_key",
+                "apiKeyName",
                 ",");
     }
 
