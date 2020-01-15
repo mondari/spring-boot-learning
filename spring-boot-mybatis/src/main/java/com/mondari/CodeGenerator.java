@@ -52,12 +52,12 @@ public class CodeGenerator {
         gc.setBaseColumnList(true); // 开启通用查询结果列
         gc.setBaseResultMap(true);  // 开启通用查询映射结果
         // 3-> Mapper.java设置
-        gc.setMapperName("%sDao");  // 设置自己的命名规则，如果对Mapper.java的名称不满意的话
+//        gc.setMapperName("%sDao");  // 设置自己的命名规则，如果对Mapper.java的名称不满意的话
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://centos-vm2:3306/mall" +
+        dsc.setUrl("jdbc:mysql://centos-vm:3306/db_example" +
                 "?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");

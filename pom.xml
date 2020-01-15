@@ -42,6 +42,7 @@
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
         <module>spring-boot-mybatis</module>
+        <module>spring-boot-mybatis-sample</module>
         <module>spring-boot-rabbitmq</module>
         <module>spring-boot-redis</module>
         <module>spring-boot-rest</module>
