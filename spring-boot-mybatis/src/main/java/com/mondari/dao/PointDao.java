@@ -42,7 +42,7 @@ public class PointDao {
         for (int i = 0; i < pages; i++) {
             int fromIndex = pageSize * i;
             int toIndex = pageSize * (i + 1);
-            List<T> subList = dataList.subList(fromIndex, toIndex > dataSize ? dataSize : toIndex);
+            List<T> subList = dataList.subList(fromIndex, Math.min(toIndex, dataSize));
             successCount += function.apply(mapper, subList);
         }
         return successCount;
