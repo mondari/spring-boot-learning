@@ -22,10 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("usr")
+                .withUser("user")
                 // 密码是：user
                 .password("$2a$10$/tsDoL7LZTBeLvSe4pK0aebam8rUbLq3ERGM2DndqY0DCzsP342zK").roles("USER").and()
-                .withUser("adm")
+                .withUser("admin")
                 // 密码是：admin
                 .password("$2a$10$yP2.KHlRLUolHRJGJb.afekqyB4bxZEpa06dNB7OXwh55i8eRA5ym").roles("USER", "ADMIN");
     }
