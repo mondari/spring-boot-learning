@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mondari.mapper.BlogMapper">
+
+    <!--嵌套 Select 查询（推荐使用这种方式）-->
+    <select id="selectBlog" resultMap="blogResult">
+        SELECT * FROM blog WHERE id = #{id}
+    </select>
+    <resultMap id="blogResult" type="Blog">
+        <constructor>
+            <idArg column="id" javaType="int"/>
+            <arg column="author_id" javaType="int"/>
+        </constructor>
+        <association property="author" column="author_id" javaType="Author" select="com.mondari.mapper.AuthorMapper.selectAuthor"/>
+        <collection property="posts" javaType="ArrayList" column="id" ofType="Post" select="com.mondari.mapper.PostMapper.selectPostsForBlog"/>
+    </resultMap>
+
+
+    <!-- 非常复杂的语句 -->
+    <select id="selectBlogDetails" resultMap="detailedBlogResultMap">
+        select B.id                as blog_id,
+               B.title             as blog_title,
+               B.author_id         as blog_author_id,
+               A.id                as author_id,
+               A.username          as author_username,
+               A.password          as author_password,
+               A.email             as author_email,
+               A.bio               as author_bio,
+               A.favourite_section as author_favourite_section,
+               P.id                as post_id,
+               P.blog_id           as post_blog_id,
+               P.author_id         as post_author_id,
+               P.create_time        as post_create_time,
+               P.section           as post_section,
+               P.subject           as post_subject,
+               P.draft             as draft,
+               P.body              as post_body,
+               C.id                as comment_id,
+               C.post_id           as comment_post_id,
+               C.name              as comment_name,
+               C.comment           as comment_text,
+               T.id                as tag_id,
+               T.name              as tag_name
+        from blog B
+                 left outer join author A on B.author_id = A.id
+                 left outer join post P on B.id = P.blog_id
+                 left outer join comment C on P.id = C.post_id
+                 left outer join tag T on P.id = T.post_id
+        where B.id = #{id}
+    </select>
+
+    <!-- 非常复杂的结果映射 -->
+    <resultMap id="detailedBlogResultMap" type="Blog">
+        <constructor>
+            <idArg column="blog_id" javaType="int"/>
+            <arg column="blog_author_id" javaType="int"/>
+        </constructor>
+        <result property="title" column="blog_title"/>
+        <association property="author" javaType="Author">
+            <id property="id" column="author_id"/>
+            <result property="username" column="author_username"/>
+            <result property="password" column="author_password"/>
+            <result property="email" column="author_email"/>
+            <result property="bio" column="author_bio"/>
+            <result property="favouriteSection" column="author_favourite_section"/>
+        </association>
+        <collection property="posts" ofType="Post">
+            <id property="id" column="post_id"/>
+            <result property="authorId" column="post_author_id"/>
+            <result property="blogId" column="post_blog_id"/>
+            <result property="subject" column="post_subject"/>
+            <association property="author" javaType="Author">
+                <id property="id" column="author_id"/>
+            </association>
+            <collection property="comments" ofType="Comment">
+                <id property="id" column="comment_id"/>
+            </collection>
+            <collection property="tags" ofType="Tag">
+                <id property="id" column="tag_id"/>
+            </collection>
+            <!--            <discriminator javaType="int" column="draft">-->
+            <!--                <case value="1" resultType="DraftPost"/>-->
+            <!--            </discriminator>-->
+        </collection>
+    </resultMap>
+
+</mapper>

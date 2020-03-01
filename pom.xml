@@ -15,14 +15,14 @@
     </parent>
 
     <properties>
-        <springfox.swagger.version>2.7.0</springfox.swagger.version>
+        <springfox.version>2.7.0</springfox.version>
         <lombok.version>1.18.6</lombok.version>
         <retrofit.version>2.5.0</retrofit.version>
-        <mybatis-spring-boot-starter.version>1.3.2</mybatis-spring-boot-starter.version>
-        <mybatis-plus-boot-starter.version>3.2.0</mybatis-plus-boot-starter.version>
-        <pagehelper-spring-boot-starter.version>1.2.10</pagehelper-spring-boot-starter.version>
+        <mybatis.version>1.3.2</mybatis.version>
+        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <pagehelper.version>1.2.10</pagehelper.version>
         <h2.version>1.4.197</h2.version>
-        <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
+        <druid.version>1.1.10</druid.version>
         <jasypt.version>1.9.2</jasypt.version>
         <jasypt-spring-boot-starter.version>2.1.1</jasypt-spring-boot-starter.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
@@ -44,6 +44,7 @@
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
         <module>spring-boot-mybatis</module>
+        <module>spring-boot-mybatis-sample</module>
         <module>spring-boot-rabbitmq</module>
         <module>spring-boot-redis</module>
         <module>spring-boot-rest</module>
@@ -88,13 +89,13 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.swagger.version}</version>
+                <version>${springfox.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <!--ui界面建议使用2.7.0经典版本-->
-                <version>${springfox.swagger.version}</version>
+                <version>${springfox.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -119,12 +120,12 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis-spring-boot-starter.version}</version>
+                <version>${mybatis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter-test</artifactId>
-                <version>${mybatis-spring-boot-starter.version}</version>
+                <version>${mybatis.version}</version>
                 <scope>test</scope>
             </dependency>
             <!--MyBatis-Plus 不能和 通用Mapper 同时存在-->
@@ -132,18 +133,18 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus-boot-starter.version}</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <!--分页插件-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper-spring-boot-starter.version}</version>
+                <version>${pagehelper.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid-spring-boot-starter.version}</version>
+                <version>${druid.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jasypt</groupId>

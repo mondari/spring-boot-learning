@@ -23,12 +23,12 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus-boot-starter.version}</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis-plus-boot-starter.version}</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <!--踩坑记录：需要加入该依赖才能使用 velocity 模板进行自动代码生成-->
         <dependency>
