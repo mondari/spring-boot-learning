@@ -38,6 +38,8 @@
         <module>spring-boot-configuration</module>
         <module>spring-boot-docker</module>
         <module>spring-boot-demo-elasticsearch</module>
+        <module>spring-boot-demo-shiro</module>
+        <module>spring-boot-demo-security</module>
         <module>spring-boot-i18n</module>
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
@@ -47,6 +49,7 @@
         <module>spring-boot-rest</module>
         <module>spring-boot-restdocs</module>
         <module>spring-boot-scheduler</module>
+        <module>spring-boot-ssm</module>
         <module>spring-boot-websocket</module>
     </modules>
 
