@@ -50,7 +50,6 @@
         <module>spring-boot-rest</module>
         <module>spring-boot-restdocs</module>
         <module>spring-boot-scheduler</module>
-        <module>spring-boot-ssm</module>
         <module>spring-boot-websocket</module>
     </modules>
 

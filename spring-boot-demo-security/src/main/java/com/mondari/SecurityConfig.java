@@ -43,8 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .usernameParameter("username")// 定义登录时用户名的key，默认是username
                 .passwordParameter("password")// 定义登陆时密码的key，默认是password
-                .loginPage("/login")// 登录页面，会将表单提交到 loginProcessingUrl
-                .loginProcessingUrl("/login")// 默认同 loginPage
                 // 登录成功操作
                 .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -63,7 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 3-> 配置注销
                 .logout()
                 .logoutUrl("/logout")// 默认值
-                // .logoutSuccessUrl("/login?logout")// 默认值
+                .invalidateHttpSession(true)// 默认值
+                .clearAuthentication(true)// 默认值
                 // 注销成功操作(设置后，上面的 logoutSuccessUrl 设置会被忽略）
                 .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
