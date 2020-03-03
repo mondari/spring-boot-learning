@@ -16,14 +16,12 @@ public class SecurityJwtApplicationTest {
     public void contextLoads() {
 
         String username = "admin";
-        String password = "admin";
         String roles = "ROLE_ADMIN";
         String base64EncodedSecretKey = "secret";
         // 声明
         Claims claim = Jwts.claims();
         claim.put("自定义Key", "自定义value");
-        claim.put("username", username);
-        claim.put("password", password);
+        claim.put("username", username);// Base64是一种编码方式，可以被解码，不建议将密码等敏感信息放进去
         claim.put("roles", roles);
         claim.setId("JWT ID");
         claim.setSubject("主题");
