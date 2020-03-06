@@ -12,11 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 单聊天室聊天
+ * 踩坑：ServerEndpoint注解若不指定configurator，那么将不会由Spring容器实例化，也就是说该类中的@Autowired注解将不生效。
+ * 指定configurator为SpringConfigurator.class才会纳入到Spring容器中。
  *
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint(value = "/chat/{username}")
 @Component
 public class ChatWebsocket {
 
@@ -33,7 +35,7 @@ public class ChatWebsocket {
     private String username;
 
     @OnOpen
-    public void onOpen(@PathParam("username") String username, Session session) {
+    public void onOpen(@PathParam("username") String username, Session session, EndpointConfig conf) {
 
         this.username = username;
         this.session = session;
@@ -45,7 +47,7 @@ public class ChatWebsocket {
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, CloseReason reason) {
         removeClient(session);
 
         String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount() + " 人";
@@ -54,12 +56,12 @@ public class ChatWebsocket {
     }
 
     @OnMessage
-    public void onMessage(String message) {
+    public void onMessage(Session session, String message) {
         sendBatch(username + "：" + message);
     }
 
     @OnError
-    public void onError(Throwable error) {
+    public void onError(Session session, Throwable error) {
         log.error("用户 {} 的连接发生错误 {}", username, error);
     }
 

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint("/chatroom/{room}/{username}")
+@ServerEndpoint(value = "/chatroom/{room}/{username}")
 @Component
 public class ChatRoomWebsocket {
 
@@ -36,7 +36,8 @@ public class ChatRoomWebsocket {
     private String room;
 
     @OnOpen
-    public void onOpen(@PathParam("username") String username, @PathParam("room") String room, Session session) {
+    public void onOpen(@PathParam("username") String username, @PathParam("room") String room,
+                       Session session, EndpointConfig conf) {
 
         this.username = username;
         this.session = session;
@@ -49,7 +50,7 @@ public class ChatRoomWebsocket {
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, CloseReason reason) {
         removeClient(session);
 
         String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount(room) + " 人";
@@ -58,12 +59,12 @@ public class ChatRoomWebsocket {
     }
 
     @OnMessage
-    public void onMessage(String message) {
+    public void onMessage(Session session, String message) {
         sendBatch(username + "：" + message, room);
     }
 
     @OnError
-    public void onError(Throwable error) {
+    public void onError(Session session, Throwable error) {
         log.error("用户 {} 的连接发生错误 {}", username, error);
     }
 
