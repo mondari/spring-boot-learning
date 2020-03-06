@@ -1,8 +1,8 @@
-package com.mondari.websocket;
+package com.mondari;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @ServerEndpoint("/chat/{username}")
-@Controller
+@Component
 public class ChatWebsocket {
 
     /**
@@ -35,28 +35,30 @@ public class ChatWebsocket {
 
         this.username = username;
         this.session = session;
+        addClient(session);
 
-        addOnlineCount();
-        clients.put(session.getId(), this);
-        log.info("有新连接加入，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
+        String message = "用户 " + username + " 加入聊天， 当前在线人数为 " + addOnlineCount() + " 人";
+        sendMessageToAll(message);
+        log.info(message);
     }
 
     @OnClose
-    public void onClose() {
-        clients.remove(username);
-        subOnlineCount();
-        log.info("有一连接关闭，ID：{}，当前在线人数为{}人", session.getId(), getOnlineCount());
+    public void onClose(Session session) {
+        removeClient(session);
+
+        String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount() + " 人";
+        sendMessageToAll(message);
+        log.info(message);
     }
 
     @OnMessage
     public void onMessage(String message) {
-        sendMessageTo("消息发送成功", session.getId());
-        sendMessageAll("客户端 " + session.getId() + " 发送一条消息：" + message);
+        sendMessageToAll(username + "：" + message);
     }
 
     @OnError
     public void onError(Throwable error) {
-        log.error("客户端 {} 的连接发生错误 {}", username, error);
+        log.error("用户 {} 的连接发生错误 {}", username, error);
     }
 
     /**
@@ -68,7 +70,7 @@ public class ChatWebsocket {
     @SneakyThrows
     private void sendMessageTo(String message, String sessionId) {
         if (clients.containsKey(sessionId)) {
-            clients.get(sessionId).session.getBasicRemote().sendText(message);
+            clients.get(sessionId).session.getAsyncRemote().sendText(message);
         }
     }
 
@@ -77,25 +79,27 @@ public class ChatWebsocket {
      *
      * @param message
      */
-    private void sendMessageAll(String message) {
+    @SneakyThrows
+    private void sendMessageToAll(String message) {
         for (ChatWebsocket item : clients.values()) {
             item.session.getAsyncRemote().sendText(message);
         }
     }
 
-    private static synchronized int getOnlineCount() {
-        return onlineCount;
+    private synchronized void addClient(Session session) {
+        clients.put(session.getId(), this);
     }
 
-    private static synchronized void addOnlineCount() {
-        ChatWebsocket.onlineCount++;
+    private synchronized void removeClient(Session session) {
+        clients.remove(session.getId());
     }
 
-    private static synchronized void subOnlineCount() {
-        ChatWebsocket.onlineCount--;
+    private static synchronized int addOnlineCount() {
+        return ++onlineCount;
     }
 
-    public static synchronized Map<String, ChatWebsocket> getClients() {
-        return clients;
+    private static synchronized int subOnlineCount() {
+        return --onlineCount;
     }
+
 }
