@@ -7,40 +7,44 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
- * 单聊天室聊天
+ * 多聊天室聊天
  *
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint("/chatroom/{room}/{username}")
 @Component
-public class ChatWebsocket {
+public class ChatRoomWebsocket {
 
     /**
-     * 在线人数
+     * 在线人数，key为参数room
      */
-    private static int onlineCount = 0;
+    private static Map<String, Integer> onlineCount = new ConcurrentHashMap<>();
     /**
      * 在线客户端，Key为SessionId
      */
-    private static Map<String, ChatWebsocket> clients = new ConcurrentHashMap<>();
+    private static Map<String, ChatRoomWebsocket> clients = new ConcurrentHashMap<>();
 
     private Session session;
     private String username;
+    private String room;
 
     @OnOpen
-    public void onOpen(@PathParam("username") String username, Session session) {
+    public void onOpen(@PathParam("username") String username, @PathParam("room") String room, Session session) {
 
         this.username = username;
         this.session = session;
+        this.room = room;
         addClient(session);
 
-        String message = "用户 " + username + " 加入聊天， 当前在线人数为 " + addOnlineCount() + " 人";
-        sendBatch(message);
+        String message = "用户 " + username + " 加入聊天， 当前在线人数为 " + addOnlineCount(room) + " 人";
+        sendBatch(message, room);
         log.info(message);
     }
 
@@ -48,14 +52,14 @@ public class ChatWebsocket {
     public void onClose(Session session) {
         removeClient(session);
 
-        String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount() + " 人";
-        sendBatch(message);
+        String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount(room) + " 人";
+        sendBatch(message, room);
         log.info(message);
     }
 
     @OnMessage
     public void onMessage(String message) {
-        sendBatch(username + "：" + message);
+        sendBatch(username + "：" + message, room);
     }
 
     @OnError
@@ -82,8 +86,9 @@ public class ChatWebsocket {
      * @param message
      */
     @SneakyThrows
-    private void sendBatch(String message) {
-        for (ChatWebsocket item : clients.values()) {
+    private void sendBatch(String message, String room) {
+        List<ChatRoomWebsocket> collect = clients.values().stream().filter(chatRoomWebsocket -> room.equals(chatRoomWebsocket.room)).collect(Collectors.toList());
+        for (ChatRoomWebsocket item : collect) {
             item.session.getAsyncRemote().sendText(message);
         }
     }
@@ -96,12 +101,18 @@ public class ChatWebsocket {
         clients.remove(session.getId());
     }
 
-    private static synchronized int addOnlineCount() {
-        return ++onlineCount;
+    private static synchronized Integer addOnlineCount(String room) {
+        Integer count = onlineCount.getOrDefault(room, 0);
+        Integer newCount = ++count;
+        onlineCount.put(room, newCount);
+        return newCount;
     }
 
-    private static synchronized int subOnlineCount() {
-        return --onlineCount;
+    private static synchronized Integer subOnlineCount(String room) {
+        Integer count = onlineCount.getOrDefault(room, 0);
+        Integer newCount = --count;
+        onlineCount.put(room, newCount);
+        return newCount;
     }
 
 }
