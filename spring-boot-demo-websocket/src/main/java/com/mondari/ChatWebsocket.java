@@ -38,7 +38,7 @@ public class ChatWebsocket {
         addClient(session);
 
         String message = "用户 " + username + " 加入聊天， 当前在线人数为 " + addOnlineCount() + " 人";
-        sendMessageToAll(message);
+        sendBatch(message);
         log.info(message);
     }
 
@@ -47,13 +47,13 @@ public class ChatWebsocket {
         removeClient(session);
 
         String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount() + " 人";
-        sendMessageToAll(message);
+        sendBatch(message);
         log.info(message);
     }
 
     @OnMessage
     public void onMessage(String message) {
-        sendMessageToAll(username + "：" + message);
+        sendBatch(username + "：" + message);
     }
 
     @OnError
@@ -80,7 +80,7 @@ public class ChatWebsocket {
      * @param message
      */
     @SneakyThrows
-    private void sendMessageToAll(String message) {
+    private void sendBatch(String message) {
         for (ChatWebsocket item : clients.values()) {
             item.session.getAsyncRemote().sendText(message);
         }
