@@ -52,7 +52,7 @@ public class ChatWebsocket {
 
         String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount() + " 人";
         sendBatch(message);
-        log.info(message);
+        log.info("{}，关闭原因：{}", message, reason.getCloseCode().toString());
     }
 
     @OnMessage

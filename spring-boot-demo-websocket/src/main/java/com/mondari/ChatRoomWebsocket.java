@@ -55,7 +55,7 @@ public class ChatRoomWebsocket {
 
         String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount(room) + " 人";
         sendBatch(message, room);
-        log.info(message);
+        log.info("{}，关闭原因：{}", message, reason.getCloseCode().toString());
     }
 
     @OnMessage
