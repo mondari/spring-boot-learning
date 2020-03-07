@@ -88,7 +88,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         // 将 access_token 存到 redis 中
-        endpoints.tokenStore(new RedisTokenStore(redisConnectionFactory))
+        RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
+        // 设置前缀为项目名
+        tokenStore.setPrefix("demo-oauth2:");
+        endpoints.tokenStore(tokenStore)
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
     }
