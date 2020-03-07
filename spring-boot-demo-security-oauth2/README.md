@@ -61,6 +61,10 @@
 3. 使用 refresh_token 刷新 access_token
    POST http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=f9937e92-8851-4279-af34-42f5c00256f4&client_id=clientId&client_secret=123
 
+## 后续优化
+
+用户信息从数据库中拿，参考Gitee开源项目Pig
+
 ## 参考
 
 该项目参考：
