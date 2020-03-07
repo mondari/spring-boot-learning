@@ -24,6 +24,11 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    public static final String GRANT_TYPE_CODE = "authorization_code";
+    public static final String GRANT_TYPE_PASSWORD = "password";
+    public static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
+    public static final String GRANT_TYPE_IMPLICIT = "implicit";
+    public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
     /**
      * 认证管理器Bean在SecurityConfig中配置
      */
@@ -66,7 +71,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 设置客户端密码（“new BCryptPasswordEncoder().encode("password")” 加密后的密码）
                 .secret("$2a$10$2nqy4VBS5veSSWE2YZyW...4ZtkKz57xzv.uT0FXeciktXJfoD7li")// userClientSecret
                 // 设置OAuth2授权方式为client_credentials
-                .authorizedGrantTypes("client_credentials", "refresh_token")
+                .authorizedGrantTypes(GRANT_TYPE_CLIENT_CREDENTIALS, GRANT_TYPE_REFRESH_TOKEN)
                 // 资源ID，要和 ResourceServerConfigurerAdapter 配置的资源ID一致，这样相应的资源才会被授权和认证
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 // 授权域
@@ -75,7 +80,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("adminClientId")
                 .secret("$2a$10$76ocrZZWBc/qyrWzINXcKO8rLcP2YEV8Qu5wUk1lNelfsSGbqfWF6")// adminClientSecret
                 // 设置OAuth2授权方式为password
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes(GRANT_TYPE_PASSWORD, GRANT_TYPE_REFRESH_TOKEN)
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 .scopes("all")
         ;
