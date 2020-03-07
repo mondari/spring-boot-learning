@@ -41,6 +41,7 @@
         <module>spring-boot-demo-security</module>
         <module>spring-boot-demo-security-json</module>
         <module>spring-boot-demo-security-jwt</module>
+        <module>spring-boot-demo-security-oauth2</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-i18n</module>
         <module>spring-boot-jpa</module>
@@ -52,7 +53,6 @@
         <module>spring-boot-rest</module>
         <module>spring-boot-restdocs</module>
         <module>spring-boot-scheduler</module>
-        <module>spring-boot-websocket</module>
     </modules>
 
     <!--项目中模块公用的依赖放在这里-->
