@@ -1,7 +1,6 @@
 package com.mondari;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,15 +57,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        /**
+         * 这里设置了两种授权方式，一种是password，一种是client_credentials
+         */
         clients.inMemory()
                 // 设置客户端ID
                 .withClient("userClientId")
                 // 设置客户端密码（“new BCryptPasswordEncoder().encode("password")” 加密后的密码）
                 .secret("$2a$10$2nqy4VBS5veSSWE2YZyW...4ZtkKz57xzv.uT0FXeciktXJfoD7li")// userClientSecret
-                // 设置授权方式为password
-                // password 授权类型用于首次获取 access_token
-                // refresh_token 授权类型用于刷新 access_token
-                .authorizedGrantTypes("password", "refresh_token")
+                // 设置OAuth2授权方式为client_credentials
+                .authorizedGrantTypes("client_credentials", "refresh_token")
                 // 资源ID，要和 ResourceServerConfigurerAdapter 配置的资源ID一致，这样相应的资源才会被授权和认证
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 // 授权域
@@ -74,6 +74,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .and()
                 .withClient("adminClientId")
                 .secret("$2a$10$76ocrZZWBc/qyrWzINXcKO8rLcP2YEV8Qu5wUk1lNelfsSGbqfWF6")// adminClientSecret
+                // 设置OAuth2授权方式为password
                 .authorizedGrantTypes("password", "refresh_token")
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 .scopes("all")
