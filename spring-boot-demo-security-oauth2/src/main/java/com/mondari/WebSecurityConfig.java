@@ -1,11 +1,13 @@
 package com.mondari;
 
+import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,14 +17,16 @@ import java.io.PrintWriter;
 
 /**
  * <p>
- * 授权服务器配置
+ * Security配置
  * </p>
+ * 在SpringBoot环境中，{@link EnableWebSecurity}注解可由{@link Configuration}注解替代，
+ * 因为在{@link WebSecurityEnablerConfiguration} 中被会自动引入
  *
  * @author limondar
  * @date 2020/3/6
  */
-@Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-updated
