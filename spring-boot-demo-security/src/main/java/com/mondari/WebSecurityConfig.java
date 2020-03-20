@@ -35,7 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    public PasswordEncoder passwordEncoder() {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //    }
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 配置用户、密码和角色
+     *
      * @param auth
      * @throws Exception
      */
@@ -57,14 +57,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password("$2a$10$yP2.KHlRLUolHRJGJb.afekqyB4bxZEpa06dNB7OXwh55i8eRA5ym").roles("USER", "ADMIN");
     }
 
+    /**
+     * 配置HTTP请求（哪些URL需要哪些权限、表单登录认证还是HTTP Basic认证、注销）
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // 1-> 请求授权
+                // 1-> 设置哪些接口的请求需要授权
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").hasRole("USER")
-                .anyRequest().authenticated() // 剩余其它接口，登录之后就能访问
+                .antMatchers("/admin/**").hasRole("ADMIN")// “/admin”开头的接口需要ADMIN角色
+                .antMatchers("/**").hasRole("USER")// “/”开头的接口需要USER角色
+                .anyRequest().authenticated() // 剩余其它接口，认证通过后才能访问
                 .and()
                 // 2-> 配置表单登录认证
                 .formLogin()
