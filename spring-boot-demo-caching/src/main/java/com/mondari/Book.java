@@ -1,34 +1,23 @@
 package com.mondari;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * 踩坑记录：必须要添加无参构造方法，否则反序列化报错
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Book {
 
     private String isbn;
     private String title;
 
-    public Book(String isbn, String title) {
-        this.isbn = isbn;
-        this.title = title;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" + "isbn='" + isbn + '\'' + ", title='" + title + '\'' + '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Book{" + "isbn='" + isbn + '\'' + ", title='" + title + '\'' + '}';
+//    }
 
 }
