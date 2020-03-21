@@ -51,10 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .withUser("user")
                 // 密码是：user
-                .password("$2a$10$/tsDoL7LZTBeLvSe4pK0aebam8rUbLq3ERGM2DndqY0DCzsP342zK").roles("USER").and()
+                .password(passwordEncoder().encode("user")).roles("USER").and()
                 .withUser("admin")
                 // 密码是：admin
-                .password("$2a$10$yP2.KHlRLUolHRJGJb.afekqyB4bxZEpa06dNB7OXwh55i8eRA5ym").roles("USER", "ADMIN")
+                .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN")
         ;
     }
 
