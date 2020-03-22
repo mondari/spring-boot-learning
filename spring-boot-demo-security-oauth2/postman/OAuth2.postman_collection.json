@@ -1,0 +1,344 @@
+{
+  "info": {
+    "_postman_id": "401b96fe-7dea-4093-b8f8-61fe49ef3b1d",
+    "name": "OAuth2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "hello",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/hello?access_token={{access_token}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "hello"
+          ],
+          "query": [
+            {
+              "key": "access_token",
+              "value": "{{access_token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "admin/hello",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/admin/hello?access_token={{access_token}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "hello"
+          ],
+          "query": [
+            {
+              "key": "access_token",
+              "value": "{{access_token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "user/hello",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/user/hello?access_token={{access_token}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "user",
+            "hello"
+          ],
+          "query": [
+            {
+              "key": "access_token",
+              "value": "{{access_token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "principal",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/principal?access_token={{access_token}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "principal"
+          ],
+          "query": [
+            {
+              "key": "access_token",
+              "value": "{{access_token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "password",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/oauth/token?username=user&password=user&client_id=passwordClient&client_secret=passwordSecret&grant_type=password&scope=any",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "oauth",
+            "token"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "user"
+            },
+            {
+              "key": "password",
+              "value": "user"
+            },
+            {
+              "key": "client_id",
+              "value": "passwordClient"
+            },
+            {
+              "key": "client_secret",
+              "value": "passwordSecret"
+            },
+            {
+              "key": "grant_type",
+              "value": "password"
+            },
+            {
+              "key": "scope",
+              "value": "any"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "client_credients",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/oauth/token?client_id=clientId&client_secret=123456&grant_type=client_credentials&scope=any",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "oauth",
+            "token"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "admin",
+              "disabled": true
+            },
+            {
+              "key": "password",
+              "value": "admin",
+              "disabled": true
+            },
+            {
+              "key": "client_id",
+              "value": "clientId"
+            },
+            {
+              "key": "client_secret",
+              "value": "123456"
+            },
+            {
+              "key": "grant_type",
+              "value": "client_credentials"
+            },
+            {
+              "key": "scope",
+              "value": "any"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "authentication_code",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/oauth/token?username=admin&password=admin&client_id=adminClientId&client_secret=admin&grant_type=password&scope=any",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "oauth",
+            "token"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "admin"
+            },
+            {
+              "key": "password",
+              "value": "admin"
+            },
+            {
+              "key": "client_id",
+              "value": "adminClientId"
+            },
+            {
+              "key": "client_secret",
+              "value": "admin"
+            },
+            {
+              "key": "grant_type",
+              "value": "password"
+            },
+            {
+              "key": "scope",
+              "value": "any"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "implicit",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "password",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "user",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8070/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8070",
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "98a89933-78ec-4cae-ab78-7f77159f532b",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "c7d4ea45-dff1-41d1-a008-ff531391f7d6",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "14020319-2482-4c73-8fe5-6a1d34a43b32",
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

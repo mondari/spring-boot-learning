@@ -4,11 +4,11 @@
 
 ## 使用方法
 
-1. 请求 access_token（以user身份）：
+1. 请求 access_token：
    
-   1. password授权方式：
+   1. password授权方式（以user身份授权）：
    
-      POST http://localhost:8080/oauth/token?username=user&password=user&grant_type=password&client_id=adminClientId&client_secret=adminClientSecret&scope=all
+      POST http://localhost:8080/oauth/token?username=user&password=user&grant_type=password&client_id=passwordClientId&client_secret=passwordSecret&scope=any
    
       ```json
       {
@@ -16,28 +16,28 @@
           "token_type": "bearer",
           "refresh_token": "323ec828-e6da-4f66-a694-84593d0b3ba7",
           "expires_in": 43199,
-          "scope": "all"
+          "scope": "any"
       }
       ```
    
       
    
-   2. client_credentials授权方式：
+   2. client_credentials授权方式（以该方式授权是没有身份信息的）：
    
-      POST http://localhost:8080/oauth/token?username=user&password=user&grant_type=client_credentials&client_id=userClientId&client_secret=userClientSecret&scope=all
+      POST http://localhost:8080/oauth/token&grant_type=client_credentials&client_id=userClientId&client_secret=user&scope=any
    
       ```json
       {
           "access_token": "2b31c7b9-eb50-4fa0-a2be-52b5e924d02f",
           "token_type": "bearer",
           "expires_in": 43170,
-          "scope": "all"
+          "scope": "any"
       }
       ```
    
       
    
-2. 访问资源：
+2. 访问资源（以client_credentials授权方式获取的access_token访问）：
 
    1. GET http://localhost:8080/admin/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
 
@@ -50,7 +50,18 @@
 
       
 
-   2. GET http://localhost:8080/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
+   2. GET http://localhost:8080/user/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
+
+      ```json
+      {
+          "error": "access_denied",
+          "error_description": "Access is denied"
+      }
+      ```
+      
+      
+      
+   3. GET http://localhost:8080/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
 
       ```json
       hello
@@ -59,7 +70,7 @@
    
 
 3. 使用 refresh_token 刷新 access_token
-   POST http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=f9937e92-8851-4279-af34-42f5c00256f4&client_id=clientId&client_secret=123
+   POST http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=f9937e92-8851-4279-af34-42f5c00256f4&client_id=userClientId&client_secret=user
 
 ## 后续优化
 

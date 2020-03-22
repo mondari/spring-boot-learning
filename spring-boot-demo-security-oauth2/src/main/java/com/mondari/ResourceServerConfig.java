@@ -24,10 +24,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         resources.resourceId("rid").stateless(true);
     }
 
+    /**
+     * 配置哪些资源被OAuth2认证授权
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").hasRole("USER")
+        http.authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
                 .anyRequest().authenticated();
     }
 }

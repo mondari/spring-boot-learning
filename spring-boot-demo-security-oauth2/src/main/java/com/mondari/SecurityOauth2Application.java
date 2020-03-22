@@ -2,8 +2,11 @@ package com.mondari;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
  * @author monda
@@ -17,13 +20,23 @@ public class SecurityOauth2Application {
     }
 
     /**
+     * 认证通过的都可以访问
+     *
+     * @return
+     */
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
+    }
+
+    /**
      * USER权限的用户可以访问
      *
      * @return
      */
-    @GetMapping("hello")
-    public String hello() {
-        return "hello";
+    @GetMapping("/user/hello")
+    public String user(@AuthenticationPrincipal(expression = "username") String name) {
+        return "hello " + name;
     }
 
     /**
@@ -31,8 +44,13 @@ public class SecurityOauth2Application {
      *
      * @return
      */
-    @GetMapping("admin")
-    public String admin() {
-        return "admin";
+    @GetMapping("/admin/hello")
+    public String admin(@AuthenticationPrincipal(expression = "username") String name) {
+        return "hello " + name;
+    }
+
+    @GetMapping(value = "/principal")
+    public Principal getUser(Principal principal) {
+        return principal;
     }
 }
