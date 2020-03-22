@@ -1,0 +1,6 @@
+spring:
+  redis:
+    host: centos-vm
+  cache:
+    # 采用redisson客户端必须手动指定cache类型为redis，才能使用RedisCacheManager
+    type: redis
