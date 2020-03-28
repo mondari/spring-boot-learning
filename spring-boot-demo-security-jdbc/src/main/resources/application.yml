@@ -1,0 +1,4 @@
+#如果使用UserDetailsManager方式配置jdbc，取消注释以下代码
+#spring:
+#  datasource:
+#    schema: classpath:org/springframework/security/core/userdetails/jdbc/users.ddl

@@ -8,9 +8,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 
 import javax.sql.DataSource;
 
@@ -32,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
@@ -44,18 +48,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .withDefaultSchema()
-                .usersByUsernameQuery(JdbcDaoImpl.DEF_USERS_BY_USERNAME_QUERY)
-                .authoritiesByUsernameQuery(JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY)
-                .passwordEncoder(passwordEncoder())
+                .dataSource(dataSource)// 必须要设置
+                .withDefaultSchema()// 使用默认的建表语句建表
+                .usersByUsernameQuery(JdbcDaoImpl.DEF_USERS_BY_USERNAME_QUERY)// 默认值
+                .authoritiesByUsernameQuery(JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY)// 默认值
                 .withUser("user")
-                // 密码是：user
                 .password(passwordEncoder().encode("user")).roles("USER").and()
                 .withUser("admin")
-                // 密码是：admin
                 .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN")
         ;
+    }
+
+    /**
+     * 也可以使用以下方式配置用户、密码和角色。（上面配置存在时，该配置无效）
+     * 需要先创建数据库表，或在配置文件中配置默认建表语句“spring.datasource.schema:classpath:org/springframework/security/core/userdetails/jdbc/users.ddl”
+     *
+     * @param dataSource
+     * @return
+     */
+    @Bean
+    UserDetailsManager users(DataSource dataSource) {
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
+                .build();
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("USER", "ADMIN")
+                .build();
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.createUser(user);
+        jdbcUserDetailsManager.createUser(admin);
+        return jdbcUserDetailsManager;
     }
 
     /**
@@ -76,7 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 2-> 配置 HTTP Basic 认证
                 .httpBasic()
                 .and()
-                // 3->  关闭csrf。踩坑记录：不关闭postman测试登录会失败
+                // 3->  关闭csrf
                 .csrf().disable()
         ;
 
