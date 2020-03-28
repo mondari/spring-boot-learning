@@ -8,10 +8,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
@@ -30,18 +31,13 @@ import java.io.PrintWriter;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
-     * https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-updated
-     * Encoded password does not look like BCrypt
+     * 使用新版的 PasswordEncoder->DelegatingPasswordEncoder 取代 BCryptPasswordEncoder
      *
      * @return PasswordEncoder
      */
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
@@ -56,25 +52,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("user")
                 .password(passwordEncoder().encode("user")).roles("USER").and()
                 .withUser("admin")
-                // 密码是：admin
                 .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN");
     }
 
     /**
-     * 也可以通过该方式配置用户、密码和角色。只有上面的配置不存在时，这里才会生效
+     * 推荐通过该方式配置用户、密码和角色。只有上面的配置不存在时，这里才会生效
      *
      * @return
      */
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withUsername("another")
-                        .password(passwordEncoder().encode("password"))
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
+                .build();
+        UserDetails admin = User.withUsername("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
     /**
@@ -127,8 +124,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 4-> 配置 HTTP Basic 认证
                 .httpBasic()
                 .and()
-                // 5->  关闭csrf。踩坑记录：不关闭postman测试登录会失败
+                // 5->  关闭csrf。踩坑记录：不关闭的话使用postman测试需要添加csrf参数，否则出错
                 .csrf().disable()
+                // 6-> 配置session管理
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         ;
 
     }
