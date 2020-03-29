@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -17,6 +16,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
  * <p>
  * 授权服务器配置
  * </p>
+ * 建议参考自动配置类：{@link org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration}
  *
  * @author limondar
  * @date 2020/3/6
@@ -28,37 +28,29 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public static final String GRANT_TYPE_CODE = "authorization_code"; // 授权码模式
     public static final String GRANT_TYPE_PASSWORD = "password"; // 密码模式
     public static final String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials"; // 客户端模式
-    public static final String GRANT_TYPE_IMPLICIT = "implicit"; // 隐式模式
+    public static final String GRANT_TYPE_IMPLICIT = "implicit"; // 简化模式
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
+
     /**
-     * 认证管理器Bean在WebSecurityConfig中配置
-     */
-    @Autowired
-    AuthenticationManager authenticationManager;
-    /**
-     * OAuth2客户端信息在WebSecurityConfig中配置
-     */
-    @Autowired
-    UserDetailsService userDetailsService;
-    /**
-     * 用来配置TokenStore
+     * 用来配置TokenStore，将 access_token 存到 redis 中
      */
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
-    /**
-     * 用来加密密码
-     */
     @Autowired
     PasswordEncoder passwordEncoder;
-
     /**
-     * @param security
-     * @throws Exception
+     * 用来配置OAuth2密码模式的授权方式
      */
+    @Autowired
+    AuthenticationManager authenticationManager;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                // 允许表单登录认证
+                // 允许表单客户端认证（默认不开启），即表单传client_id和client_secret参数，
+                // 否则需要请求头传“Authorization: Basic base64("client_id:client_secret")”
+                // 比如：假设 client_id和client_secret 分别为 "appId" 和 "appSecret"，
+                // 则需在请求头传“Authorization: Basic YXBwSWQ6YXBwU2VjcmV0”
                 .allowFormAuthenticationForClients()
         ;
     }
@@ -71,42 +63,37 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        /**
-         * 这里设置了两种授权方式，一种是password，一种是client_credentials
-         */
         clients.inMemory()
                 // 设置客户端ID
-                .withClient("clientId")
+                .withClient("appId")
                 // 设置客户端Secret
-                .secret(passwordEncoder.encode("123456"))// userClientSecret
-                // 设置OAuth2授权方式为client_credentials
-                .authorizedGrantTypes(GRANT_TYPE_CLIENT_CREDENTIALS, GRANT_TYPE_REFRESH_TOKEN)
-                // 资源ID，要和 ResourceServerConfigurerAdapter 配置的资源ID一致，这样相应的资源才会被授权和认证
+                .secret(passwordEncoder.encode("appSecret"))// userClientSecret
+                // 设置OAuth2授权方式
+                .authorizedGrantTypes(
+                        GRANT_TYPE_CODE,
+                        GRANT_TYPE_PASSWORD,
+                        GRANT_TYPE_CLIENT_CREDENTIALS,
+                        GRANT_TYPE_IMPLICIT,
+                        GRANT_TYPE_REFRESH_TOKEN)
+                .authorities("ROLE_USER")
+                // 如果配置了授权方式为授权码模式，必须设置这个
+                .redirectUris("http://mrbird.cc")
+                // 资源ID
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 // 授权域
-                .scopes("any")
-                .and()
-                .withClient("passwordClient")
-                .secret(passwordEncoder.encode("passwordSecret"))// adminClientSecret
-                // 设置OAuth2授权方式为password
-                .authorizedGrantTypes(GRANT_TYPE_PASSWORD, GRANT_TYPE_REFRESH_TOKEN)
-                .resourceIds(ResourceServerConfig.RESOURCE_ID)
                 .scopes("any")
         ;
     }
 
-    /**
-     * @param endpoints
-     * @throws Exception
-     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        // 将 access_token 存到 redis 中
         RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
         // 设置前缀为项目名
         tokenStore.setPrefix("security-oauth2:");
         endpoints.tokenStore(tokenStore)
+                // 如果配置了授权方式为密码模式，必须设置这个
                 .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
+        ;
+
     }
 }

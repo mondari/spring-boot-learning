@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-public class SecurityOauth2ApplicationTest {
+public class Oauth2ApplicationTest {
 
     @Test
     public void encodedPassword() {

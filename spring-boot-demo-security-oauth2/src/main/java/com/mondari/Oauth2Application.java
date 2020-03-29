@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 /**
- * @author monda
+ * @author limondar
+ * @date 2020/3/6
  */
 @RestController
 @SpringBootApplication
-public class SecurityOauth2Application {
+public class Oauth2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecurityOauth2Application.class);
+        SpringApplication.run(Oauth2Application.class);
     }
 
     /**
@@ -27,6 +28,11 @@ public class SecurityOauth2Application {
     @GetMapping("/hello")
     public String hello() {
         return "hello";
+    }
+
+    @GetMapping(value = "/principal")
+    public Principal getUser(Principal principal) {
+        return principal;
     }
 
     /**
@@ -49,8 +55,23 @@ public class SecurityOauth2Application {
         return "hello " + name;
     }
 
-    @GetMapping(value = "/principal")
-    public Principal getUser(Principal principal) {
-        return principal;
+    /**
+     * USER权限的用户可以访问
+     *
+     * @return
+     */
+    @GetMapping("/res/user/hello")
+    public String userResource(@AuthenticationPrincipal(expression = "username") String name) {
+        return "hello " + name;
+    }
+
+    /**
+     * ADMIN权限的用户可以访问
+     *
+     * @return
+     */
+    @GetMapping("/res/admin/hello")
+    public String adminResource(@AuthenticationPrincipal(expression = "username") String name) {
+        return "hello " + name;
     }
 }

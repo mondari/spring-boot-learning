@@ -8,34 +8,39 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 /**
  * <p>
- * 资源服务器配置（配置哪些资源属于哪些角色）
+ * 配置资源服务器（如果不配置的话，使用access_token无法访问任何资源）
  * </p>
+ * 建议参考自动配置{@link org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerConfiguration}
  *
  * @author limondar
- * @date 2020/3/7
+ * @date 2020/3/6
  */
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig
+        extends ResourceServerConfigurerAdapter {
+
     public static final String RESOURCE_ID = "rid";
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("rid").stateless(true);
+        resources.resourceId(RESOURCE_ID);
     }
 
     /**
-     * 配置哪些资源被OAuth2认证授权
+     * 配置使用access_token访问资源，注意不要与{@link WebSecurityConfig#configure(HttpSecurity)}配置冲突
      *
      * @param http
      * @throws Exception
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated();
+        http
+                .antMatcher("/res/**")// 指定/res开头的由资源管理器处理
+                .authorizeRequests()
+                .antMatchers("/res/admin/**").hasRole("ADMIN")
+                .antMatchers("/res/**").hasRole("USER")
+                .anyRequest().authenticated() // 剩余其它接口，认证通过后才能访问
+        ;
     }
 }

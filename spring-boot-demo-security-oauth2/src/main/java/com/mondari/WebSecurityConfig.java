@@ -2,12 +2,15 @@ package com.mondari;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * <p>
@@ -22,38 +25,53 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
-
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        // super.userDetailsServiceBean() 或 super.userDetailsService() 都可以，推荐后者
-        return super.userDetailsService();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
-     * 配置AuthenticationManagerBuilder，也就是配置用户、密码和角色，
-     * 有了这个才会有AuthenticationManager，否则系统会自动生成一个默认的
+     * 用来配置OAuth2密码模式的授权方式
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
+                .build();
+        UserDetails admin = User.withUsername("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+
+    /**
+     * 配置用户名和密码登录访问的资源，注意不要与资源服务器{@link ResourceServerConfig#configure(HttpSecurity)}的配置冲突
      *
-     * @param auth
+     * @param http
      * @throws Exception
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                // 密码是：user
-                .password(passwordEncoder().encode("user")).roles("USER").and()
-                .withUser("admin")
-                // 密码是：admin
-                .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN");
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                // 1-> 设置哪些接口的请求需要授权
+                .authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")// “/admin”开头的接口需要ADMIN角色
+                .antMatchers("/**").hasRole("USER")// “/”开头的接口需要USER角色
+                .anyRequest().authenticated() // 剩余其它接口，认证通过后才能访问
+                .and()
+                // 2-> 配置表单登录认证
+                .formLogin()
+                .and()
+                // 3->  关闭csrf
+                .csrf().disable()
+        ;
     }
-
 }
+
