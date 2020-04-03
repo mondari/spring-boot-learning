@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint(value = "/chatroom/{room}/{username}")
+@ServerEndpoint(value = "/chatroom/{roomId}/{userId}")
 @Component
-public class ChatRoomWebsocket {
+public class ChatRoomEndpoint {
 
     /**
      * 在线人数，key为参数room
@@ -29,23 +29,23 @@ public class ChatRoomWebsocket {
     /**
      * 在线客户端，Key为SessionId
      */
-    private static Map<String, ChatRoomWebsocket> clients = new ConcurrentHashMap<>();
+    private static Map<String, ChatRoomEndpoint> clients = new ConcurrentHashMap<>();
 
     private Session session;
-    private String username;
-    private String room;
+    private String userId;
+    private String roomId;
 
     @OnOpen
-    public void onOpen(@PathParam("username") String username, @PathParam("room") String room,
+    public void onOpen(@PathParam("userId") String userId, @PathParam("roomId") String roomId,
                        Session session, EndpointConfig conf) {
 
-        this.username = username;
+        this.userId = userId;
         this.session = session;
-        this.room = room;
+        this.roomId = roomId;
         addClient(session);
 
-        String message = "用户 " + username + " 加入聊天， 当前在线人数为 " + addOnlineCount(room) + " 人";
-        sendBatch(message, room);
+        String message = "用户 " + userId + " 加入聊天， 当前在线人数为 " + addOnlineCount(roomId) + " 人";
+        sendBatch(message, roomId);
         log.info(message);
     }
 
@@ -53,19 +53,19 @@ public class ChatRoomWebsocket {
     public void onClose(Session session, CloseReason reason) {
         removeClient(session);
 
-        String message = "用户 " + username + " 退出聊天， 当前在线人数为 " + subOnlineCount(room) + " 人";
-        sendBatch(message, room);
+        String message = "用户 " + userId + " 退出聊天， 当前在线人数为 " + subOnlineCount(roomId) + " 人";
+        sendBatch(message, roomId);
         log.info("{}，关闭原因：{}", message, reason.getCloseCode().toString());
     }
 
     @OnMessage
     public void onMessage(Session session, String message) {
-        sendBatch(username + "：" + message, room);
+        sendBatch(userId + "：" + message, roomId);
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("用户 {} 的连接发生错误 {}", username, error);
+        log.error("用户 {} 的连接发生错误 {}", userId, error);
     }
 
     /**
@@ -88,8 +88,8 @@ public class ChatRoomWebsocket {
      */
     @SneakyThrows
     private void sendBatch(String message, String room) {
-        List<ChatRoomWebsocket> collect = clients.values().stream().filter(chatRoomWebsocket -> room.equals(chatRoomWebsocket.room)).collect(Collectors.toList());
-        for (ChatRoomWebsocket item : collect) {
+        List<ChatRoomEndpoint> collect = clients.values().stream().filter(endpoint -> room.equals(endpoint.roomId)).collect(Collectors.toList());
+        for (ChatRoomEndpoint item : collect) {
             item.session.getAsyncRemote().sendText(message);
         }
     }

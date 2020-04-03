@@ -13,7 +13,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 public class WebSocketConfig {
     /**
      * 扫描 {@link javax.websocket.server.ServerEndpointConfig} 和
-     * {@link javax.websocket.server.ServerEndpoint} 注解
+     * {@link javax.websocket.server.ServerEndpoint} Bean并注册到WebSocket运行时
      *
      * @return
      */
