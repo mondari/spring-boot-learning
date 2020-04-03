@@ -1,4 +1,4 @@
-package com.mondari;
+package com.mondari.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

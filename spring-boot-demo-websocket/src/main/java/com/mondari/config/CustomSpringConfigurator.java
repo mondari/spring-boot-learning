@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.mondari;
+package com.mondari.config;
 
+import com.mondari.util.ApplicationContextUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
