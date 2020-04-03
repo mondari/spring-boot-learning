@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author limondar
  */
 @SpringBootApplication
-public class WebSocketDemoApplication {
+public class WebSocketApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WebSocketDemoApplication.class, args);
+        SpringApplication.run(WebSocketApplication.class, args);
     }
 
 }
