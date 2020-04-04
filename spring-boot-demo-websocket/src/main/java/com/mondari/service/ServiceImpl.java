@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceImpl {
     public void hello() {
-        log.info("====> hello");
+        log.info("====> Welcome to chatroom!");
     }
 }

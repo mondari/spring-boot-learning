@@ -25,29 +25,17 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import javax.websocket.server.ServerEndpoint;
 import javax.websocket.server.ServerEndpointConfig.Configurator;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A {@link Configurator} for initializing
- * {@link ServerEndpoint}-annotated classes through Spring.
+ * 本自定义Configurator在原来 {@link org.springframework.web.socket.server.standard.SpringConfigurator} 的基础上，将其容器
+ * WebApplicationContext 改为 ApplicationContext，从而解决"Failed to find the root WebApplicationContext. Was ContextLoaderListener not used?"的问题
  *
- * <p>
- * <pre class="code">
- * &#064;ServerEndpoint(value = "/echo", configurator = SpringConfigurator.class)
- * public class EchoEndpoint {
- *     // ...
- * }
- * </pre>
- *
- * @author Rossen Stoyanchev
- * @see ServerEndpointExporter
- * @since 4.0
+ * @author monda
  */
 public class CustomSpringConfigurator extends Configurator {
 
