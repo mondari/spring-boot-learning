@@ -6,3 +6,5 @@ server:
     key-store-password: 123456
     key-password: 123456
     key-alias: tomcat
+  http2:
+    enabled: true
