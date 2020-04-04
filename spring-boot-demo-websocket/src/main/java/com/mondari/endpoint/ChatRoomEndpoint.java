@@ -1,16 +1,17 @@
 package com.mondari.endpoint;
 
+import com.mondari.config.CustomSpringConfigurator;
+import com.mondari.service.ServiceImpl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * 多聊天室聊天
@@ -18,101 +19,104 @@ import java.util.stream.Collectors;
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint(value = "/chatroom/{roomId}/{userId}")
+@ServerEndpoint(value = "/chatroom/{roomId}/{userId}", configurator = CustomSpringConfigurator.class)
 @Component
 public class ChatRoomEndpoint {
 
+    public static final String ROOM_ID = "roomId";
+    public static final String USER_ID = "userId";
+    String userInTemplate = "用户 %s 加入聊天室 %s，当前在线人数为 %s 人";
+    String userOutTemplate = "用户 %s 退出聊天室 %s，当前在线人数为 %s 人";
+
     /**
-     * 在线人数，key为参数room
+     * 在线人数，key为roomId
      */
     private static Map<String, Integer> onlineCount = new ConcurrentHashMap<>();
-    /**
-     * 在线客户端，Key为SessionId
-     */
-    private static Map<String, ChatRoomEndpoint> clients = new ConcurrentHashMap<>();
 
-    private Session session;
-    private String userId;
-    private String roomId;
+    @Autowired
+    ServiceImpl service;
 
     @OnOpen
-    public void onOpen(@PathParam("userId") String userId, @PathParam("roomId") String roomId,
+    public void onOpen(@PathParam(ROOM_ID) String roomId, @PathParam(USER_ID) String userId,
                        Session session, EndpointConfig conf) {
 
-        this.userId = userId;
-        this.session = session;
-        this.roomId = roomId;
-        addClient(session);
+        service.hello();
 
-        String message = "用户 " + userId + " 加入聊天， 当前在线人数为 " + addOnlineCount(roomId) + " 人";
-        sendBatch(message, roomId);
+        Map<String, Object> userProperties = session.getUserProperties();
+        userProperties.put(ROOM_ID, roomId);
+        userProperties.put(USER_ID, userId);
+
+        String message = String.format(userInTemplate, userId, roomId, addOnlineCount(roomId));
+        sendBatch(session, message, roomId);
         log.info(message);
     }
 
     @OnClose
-    public void onClose(Session session, CloseReason reason) {
-        removeClient(session);
-
-        String message = "用户 " + userId + " 退出聊天， 当前在线人数为 " + subOnlineCount(roomId) + " 人";
-        sendBatch(message, roomId);
+    public void onClose(@PathParam(ROOM_ID) String roomId, @PathParam(USER_ID) String userId,
+                        Session session, CloseReason reason) {
+        String message = String.format(userOutTemplate, userId, roomId, subOnlineCount(roomId));
+        sendBatch(session, message, roomId);
         log.info("{}，关闭原因：{}", message, reason.getCloseCode().toString());
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
-        sendBatch(userId + "：" + message, roomId);
+    public void onMessage(@PathParam(ROOM_ID) String roomId, @PathParam(USER_ID) String userId,
+                          Session session, String message) {
+        sendBatch(session, userId + "：" + message, roomId);
     }
 
     @OnError
-    public void onError(Session session, Throwable error) {
-        log.error("用户 {} 的连接发生错误 {}", userId, error);
+    public void onError(@PathParam(ROOM_ID) String roomId, @PathParam(USER_ID) String userId,
+                        Session session, Throwable error) {
+        log.error("房间 {} 的用户 {} 的连接发生错误 {}", roomId, userId, error);
     }
 
     /**
-     * 发送消息给指定的人
+     * 发送消息给指定房间的人
      *
+     * @param session
      * @param message
-     * @param sessionId
+     * @param roomId
+     * @param userId
      */
     @SneakyThrows
-    private void sendMessageTo(String message, String sessionId) {
-        if (clients.containsKey(sessionId)) {
-            clients.get(sessionId).session.getAsyncRemote().sendText(message);
+    private void sendMessageTo(Session session, String message, String roomId, String userId) {
+        for (Session openSession : session.getOpenSessions()) {
+            Map<String, Object> userProperties = openSession.getUserProperties();
+            if (userProperties.getOrDefault(ROOM_ID, ROOM_ID).equals(roomId)
+                    && userProperties.getOrDefault(USER_ID, USER_ID).equals(userId)
+                    && openSession.isOpen()) {
+                openSession.getAsyncRemote().sendText(message);
+            }
         }
     }
 
     /**
      * 群发消息
      *
+     * @param session
      * @param message
      */
     @SneakyThrows
-    private void sendBatch(String message, String room) {
-        List<ChatRoomEndpoint> collect = clients.values().stream().filter(endpoint -> room.equals(endpoint.roomId)).collect(Collectors.toList());
-        for (ChatRoomEndpoint item : collect) {
-            item.session.getAsyncRemote().sendText(message);
+    private void sendBatch(Session session, String message, String roomId) {
+        for (Session openSession : session.getOpenSessions()) {
+            if (openSession.getUserProperties().getOrDefault(ROOM_ID, ROOM_ID).equals(roomId) && openSession.isOpen()) {
+                openSession.getAsyncRemote().sendText(message);
+            }
         }
     }
 
-    private synchronized void addClient(Session session) {
-        clients.put(session.getId(), this);
-    }
-
-    private synchronized void removeClient(Session session) {
-        clients.remove(session.getId());
-    }
-
-    private static synchronized Integer addOnlineCount(String room) {
-        Integer count = onlineCount.getOrDefault(room, 0);
+    private static synchronized Integer addOnlineCount(String roomId) {
+        Integer count = onlineCount.getOrDefault(roomId, 0);
         Integer newCount = ++count;
-        onlineCount.put(room, newCount);
+        onlineCount.put(roomId, newCount);
         return newCount;
     }
 
-    private static synchronized Integer subOnlineCount(String room) {
-        Integer count = onlineCount.getOrDefault(room, 0);
+    private static synchronized Integer subOnlineCount(String roomId) {
+        Integer count = onlineCount.getOrDefault(roomId, 0);
         Integer newCount = --count;
-        onlineCount.put(room, newCount);
+        onlineCount.put(roomId, newCount);
         return newCount;
     }
 
