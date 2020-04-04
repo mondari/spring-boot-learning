@@ -50,7 +50,6 @@
         <module>spring-boot-demo-security-oauth2</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-demo-websocket-handler</module>
-        <module>spring-boot-demo-websocket-wss</module>
         <module>spring-boot-i18n</module>
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
