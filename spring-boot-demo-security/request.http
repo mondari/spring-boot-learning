@@ -1,0 +1,40 @@
+### 1.以user身份登录
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=user&password=user
+
+
+### 2.能调用user权限的接口
+GET http://localhost:8080/hello
+Accept: application/json
+
+
+### 3.但是不能调用admin权限的接口
+GET http://localhost:8080/admin
+Accept: application/json
+
+
+### 4.退出登录
+POST http://localhost:8080/logout
+Content-Type: application/x-www-form-urlencoded
+
+
+### 5.以admin身份登录
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=admin
+
+
+### 6.能调用user权限的接口
+GET http://localhost:8080/hello
+Accept: application/json
+
+
+### 7.也能调用admin权限的接口
+GET http://localhost:8080/admin
+Accept: application/json
+
+
+###
