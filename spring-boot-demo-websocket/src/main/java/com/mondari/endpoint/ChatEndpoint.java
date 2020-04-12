@@ -1,6 +1,6 @@
 package com.mondari.endpoint;
 
-import com.mondari.config.CustomSpringConfigurator;
+import com.mondari.config.BeanFactoryConfigurator;
 import com.mondari.service.ServiceImpl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import javax.websocket.server.ServerEndpoint;
  * @author limondar
  */
 @Slf4j
-@ServerEndpoint(value = "/chat/{userId}", configurator = CustomSpringConfigurator.class)
+@ServerEndpoint(value = "/chat/{userId}", configurator = BeanFactoryConfigurator.class)
 @Component
 public class ChatEndpoint {
 

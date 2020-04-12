@@ -2,6 +2,16 @@
 
 启动服务，打开浏览器，打开[WebSocket在线测试工具](http://www.websocket-test.com/)，连接 **wss://localhost:8443/chat/{你的昵称或用户ID}** 或 **wss://localhost:8443/chatroom/{房间号}/{你的昵称或用户ID}** 即可进行在线聊天
 
+## 功能简介
+
+- [x] 多人聊天室和群组聊天室两大功能
+- [x] 在线人数功能
+- [x] ServerEndpoint单例（默认情况下JavaEE的ServerEndpoint是多实例）
+- [x] 解决不能Autowired的问题
+- [x] 解决使用SpringConfigurator报错的问题：`Failed to find the root WebApplicationContext. Was ContextLoaderListener not used?`
+- [x] ServerSocket单例情况下消息群发
+- [x] WSS安全连接
+
 ## 配置WSS协议
 
 啥是wss协议？wss全称是websocket secure，也就是 websocket 协议的加密版本，类似与https与http的关系。
