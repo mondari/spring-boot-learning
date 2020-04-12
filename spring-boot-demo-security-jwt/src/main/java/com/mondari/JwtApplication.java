@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @SpringBootApplication
-public class SecurityJwtApplication {
+public class JwtApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecurityJwtApplication.class);
+        SpringApplication.run(JwtApplication.class);
     }
 
     @GetMapping("hello")

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-public class SecurityJwtApplicationTest {
+public class JwtApplicationTest {
 
     @Test
     public void contextLoads() {
