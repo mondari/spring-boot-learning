@@ -14,7 +14,6 @@
     </parent>
 
     <dependencies>
-        <!--spring-security-oauth2-autoconfigure必须是2.1.x版本-->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
