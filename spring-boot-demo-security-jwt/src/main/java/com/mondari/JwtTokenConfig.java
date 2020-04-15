@@ -23,12 +23,13 @@ public class JwtTokenConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        accessTokenConverter.setSigningKey("signingKey"); // 签名密钥
+        // 签名密钥
+        accessTokenConverter.setSigningKey("signingKey");
         return accessTokenConverter;
     }
 
     /**
-     * 自定义TokenEnhancer
+     * 自定义TokenEnhancer，对 JWT 的载荷进行扩展
      *
      * @return
      */
