@@ -15,6 +15,7 @@
     </parent>
 
     <properties>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
         <springfox.version>2.7.0</springfox.version>
         <lombok.version>1.18.6</lombok.version>
         <retrofit.version>2.5.0</retrofit.version>
@@ -105,6 +106,14 @@
     <!--指定好好依赖项目的版本，到时候直接在项目中引用，不需要加版本号-->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
