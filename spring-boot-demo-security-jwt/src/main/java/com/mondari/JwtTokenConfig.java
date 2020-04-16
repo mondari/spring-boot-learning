@@ -2,10 +2,14 @@ package com.mondari;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+
+import java.security.KeyPair;
 
 /**
  * 添加JWT Tokens功能，需要有 {@link JwtTokenStore} 和 {@link JwtAccessTokenConverter}
@@ -23,8 +27,13 @@ public class JwtTokenConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        // 签名密钥
+        // 对称加密
         accessTokenConverter.setSigningKey("signingKey");
+
+        // 非对称加密
+//        KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("keystore.jks"), "password".toCharArray()).getKeyPair("alias");
+//        accessTokenConverter.setKeyPair(keyPair);
+
         return accessTokenConverter;
     }
 
