@@ -27,6 +27,13 @@ Authorization: Basic appId appSecret
 }
 ```
 
+## 如何生成keystore.jks
+非对称加密需要用到 keystore.jks，该文件的生成如要用到 Java 自带的 keytool，使用方法如下：
+执行命令
+```shell
+keytool -genkeypair -alias alias -keyalg RSA -keystore .\src\main\resources\keystore.jks
+```
+系统会提示输入密钥库口令和alias的密钥口令（一般和密钥库口令保持一致即可），设置完成后就会生成keystore.jks
 
 
 ## 参考：

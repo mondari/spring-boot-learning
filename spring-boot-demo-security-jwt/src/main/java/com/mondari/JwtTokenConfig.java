@@ -28,11 +28,11 @@ public class JwtTokenConfig {
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
         // 对称加密
-        accessTokenConverter.setSigningKey("signingKey");
+//        accessTokenConverter.setSigningKey("signingKey");
 
         // 非对称加密
-//        KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("keystore.jks"), "password".toCharArray()).getKeyPair("alias");
-//        accessTokenConverter.setKeyPair(keyPair);
+        KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("keystore.jks"), "password".toCharArray()).getKeyPair("alias");
+        accessTokenConverter.setKeyPair(keyPair);
 
         return accessTokenConverter;
     }
