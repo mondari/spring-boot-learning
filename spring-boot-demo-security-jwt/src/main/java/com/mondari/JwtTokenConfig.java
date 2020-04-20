@@ -20,6 +20,11 @@ public class JwtTokenConfig {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
+    /**
+     * {@code JwtAccessTokenConverter} 其内部默认使用 {@code DefaultAccessTokenConverter} 来 convertAccessToken
+     *
+     * @return
+     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
