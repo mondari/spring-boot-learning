@@ -21,6 +21,11 @@ public class Sender {
         rabbitTemplate.convertAndSend(EXCHANGE_DIRECT, ROUTING_KEY_DIRECT, message);
     }
 
+    /**
+     * 发布订阅模式
+     *
+     * @param message
+     */
     public void sendMessageToTopic(String message) {
         System.out.println("Sending message to topic");
         rabbitTemplate.convertAndSend(EXCHANGE_TOPIC, ROUTING_KEY_TOPIC_FOO, message);
@@ -28,8 +33,7 @@ public class Sender {
     }
 
     /**
-     * 发布订阅模式，或者叫广播订阅模式：
-     * 发送到 EXCHANGE_FANOUT 的消息，都会被监听该交换机的队列接收。
+     * 广播模式：发送到 EXCHANGE_FANOUT 的消息，都会被监听该交换机的队列接收。
      *
      * @param message
      */

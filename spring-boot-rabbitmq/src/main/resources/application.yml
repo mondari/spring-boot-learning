@@ -1,3 +1,9 @@
 spring:
   rabbitmq:
     host: centos-vm
+    username: rabbitmq
+    password: rabbitmq
+    # virtual-host 不会自动创建，服务启动前需要手动创建
+    virtual-host: /
+    listener:
+      type: simple
