@@ -21,6 +21,11 @@ public class RabbitMQConfig {
     public static final String QUEUE_FOO = "foo";
     public static final String QUEUE_BAR = "bar";
 
+    /**
+     * 定义一个持久(服务器即使重启都还会存在)、自动删除(没在用的时候会删除)的Exchange
+     *
+     * @return
+     */
     @Bean
     DirectExchange exchangeDirect() {
         return new DirectExchange(EXCHANGE_DIRECT, true, false);
@@ -36,11 +41,21 @@ public class RabbitMQConfig {
         return new FanoutExchange(EXCHANGE_FANOUT);
     }
 
+    /**
+     * 定义一个持久队列
+     *
+     * @return
+     */
     @Bean
     Queue queueFoo() {
         return new Queue(QUEUE_FOO, true);
     }
 
+    /**
+     * 定义一个非持久队列
+     *
+     * @return
+     */
     @Bean
     Queue queueBar() {
         return new Queue(QUEUE_BAR, false);
@@ -48,6 +63,7 @@ public class RabbitMQConfig {
 
     /**
      * 凡是发送给 DirectExchange且RoutingKey为“direct”的消息，都会发送到 queueFoo 和 queueBar
+     *
      * @return
      */
     @Bean
@@ -62,6 +78,7 @@ public class RabbitMQConfig {
 
     /**
      * 凡是发送给TopicExchange且RoutingKey以“topic.”开头的消息，都会发送到 queueFoo
+     *
      * @return
      */
     @Bean
@@ -69,6 +86,11 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(queueFoo()).to(exchangeTopic()).with(ROUTING_KEY_TOPIC);
     }
 
+    /**
+     * 凡是发送给FanoutExchange的消息，都会发送到 queueFoo 和 queueBar
+     *
+     * @return
+     */
     @Bean
     Binding bindingQueueFooToFanout() {
         return BindingBuilder.bind(queueFoo()).to(exchangeFanout());
