@@ -25,5 +25,19 @@ public class Receiver {
         log.info("Bar: {}", message.toString());
     }
 
+    /**
+     * 监听器也可以酱紫定义
+     *
+     * @param message
+     */
+    // @RabbitListener(bindings = @QueueBinding(
+    //         value = @Queue(value = QUEUE_BAR, durable = "false"),
+    //         exchange = @Exchange(value = RabbitMQConfig.EXCHANGE_DIRECT, type = "direct"),
+    //         key = ROUTING_KEY_DIRECT)
+    // )
+    // public void receiveMessageForBar(Message message) {
+    //     log.info("Bar: {}", message.toString());
+    // }
+
 }
 
