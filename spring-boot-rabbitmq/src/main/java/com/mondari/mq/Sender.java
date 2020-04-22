@@ -1,5 +1,6 @@
 package com.mondari.mq;
 
+import com.mondari.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,13 +17,13 @@ public class Sender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendMessageToDirect(String message) {
-        System.out.println("Sending message to direct");
+    public void sendMessageToDirect(Message message) {
+        System.out.println("Sending message to direct exchange");
         rabbitTemplate.convertAndSend(EXCHANGE_DIRECT, ROUTING_KEY_DIRECT, message);
     }
 
-    public void sendMessageToTopic(String message) {
-        System.out.println("Sending message to topic");
+    public void sendMessageToTopic(Message message) {
+        System.out.println("Sending message to topic exchange");
         rabbitTemplate.convertAndSend(EXCHANGE_TOPIC, ROUTING_KEY_TOPIC_FOO, message);
         rabbitTemplate.convertAndSend(EXCHANGE_TOPIC, ROUTING_KEY_TOPIC_BAR, message);
     }
@@ -33,8 +34,8 @@ public class Sender {
      *
      * @param message
      */
-    public void sendMessageToFanout(String message) {
-        System.out.println("Sending message to fanout");
+    public void sendMessageToFanout(Message message) {
+        System.out.println("Sending message to fanout exchange");
         // ROUTING_KEY_FANOUT 填任何字符串都会被忽略
         rabbitTemplate.convertAndSend(EXCHANGE_FANOUT, ROUTING_KEY_FANOUT, message);
     }

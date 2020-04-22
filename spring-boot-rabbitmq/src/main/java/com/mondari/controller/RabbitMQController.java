@@ -1,5 +1,6 @@
 package com.mondari.controller;
 
+import com.mondari.Message;
 import com.mondari.mq.Sender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,18 +17,18 @@ public class RabbitMQController {
     }
 
     @PostMapping("/message/direct")
-    public void sendMessageToDirect(String message) {
+    public void sendMessageToDirect(Message message) {
 
         sender.sendMessageToDirect(message);
     }
 
     @PostMapping("/message/topic")
-    public void sendMessageToTopic(String message) {
+    public void sendMessageToTopic(Message message) {
         sender.sendMessageToTopic(message);
     }
 
     @PostMapping("/message/fanout")
-    public void sendMessageToFanout(String message) {
+    public void sendMessageToFanout(Message message) {
         sender.sendMessageToFanout(message);
     }
 

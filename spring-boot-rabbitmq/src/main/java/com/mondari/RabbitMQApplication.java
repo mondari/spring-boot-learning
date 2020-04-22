@@ -1,5 +1,6 @@
 package com.mondari;
 
+import cn.hutool.core.util.IdUtil;
 import com.mondari.mq.Sender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +23,7 @@ public class RabbitMQApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        sender.sendMessageToDirect("Hello, RabbitMQ!");
+        sender.sendMessageToDirect(new Message().setId(IdUtil.fastSimpleUUID()).setContent("Hello, RabbitMQ!"));
     }
 }
 

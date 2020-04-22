@@ -1,3 +1,5 @@
 spring:
   rabbitmq:
     host: centos-vm
+    username: rabbitmq
+    password: rabbitmq
