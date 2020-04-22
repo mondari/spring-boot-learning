@@ -7,3 +7,8 @@ spring:
     virtual-host: /
     listener:
       type: simple
+      simple:
+        default-requeue-rejected: true
+    publisher-returns: true
+    publisher-confirm-type: simple
+
