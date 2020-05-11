@@ -1,0 +1,19 @@
+### 1.通过 JSON 登录
+POST http://localhost:8080/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user"
+}
+
+### 2.请求接口
+GET http://localhost:8080/hello
+Accept: application/json
+Content-Type: application/json
+
+### 3.注销登录
+GET http://localhost:8080/logout
+Accept: application/json
+Content-Type: application/json

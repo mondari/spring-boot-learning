@@ -1,0 +1,10 @@
+### Basic 认证请求 ###
+### 随便输入一个用户名即可，只要密码是123456
+GET http://localhost:8080/hello
+Authorization: Basic user 123456
+Accept: application/json
+
+### 随便输入一个用户名即可，只要密码是123456
+GET http://localhost:8080/admin
+Authorization: Basic user 123456
+Accept: application/json
