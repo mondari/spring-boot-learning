@@ -1,0 +1,20 @@
+### Basic 认证请求 ###
+### 1.user身份能调用user权限的接口
+GET http://localhost:8080/hello
+Authorization: Basic user user
+Accept: application/json
+
+### 2.user身份不能调用admin权限的接口
+GET http://localhost:8080/admin
+Authorization: Basic user user
+Accept: application/json
+
+### 3.admin身份能调用user权限的接口
+GET http://localhost:8080/hello
+Authorization: Basic admin admin
+Accept: application/json
+
+### 4.admin身份能调用admin权限的接口
+GET http://localhost:8080/admin
+Authorization: Basic admin admin
+Accept: application/json
