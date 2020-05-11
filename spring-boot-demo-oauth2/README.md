@@ -1,4 +1,4 @@
-# spring-boot-demo-security-oauth2
+# spring-boot-demo-oauth2
 
 [toc]
 
