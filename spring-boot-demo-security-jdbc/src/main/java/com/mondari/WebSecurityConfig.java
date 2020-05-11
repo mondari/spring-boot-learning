@@ -60,29 +60,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 也可以使用以下方式配置用户、密码和角色。（上面配置存在时，该配置无效）
-     * 需要先创建数据库表，或在配置文件中配置默认建表语句“spring.datasource.schema:classpath:org/springframework/security/core/userdetails/jdbc/users.ddl”
+     * 也可以使用以下方式配置用户、密码和角色。（两种配置只能存在一种）
+     * 注意：需要先创建数据库表，或在配置文件中配置默认建表语句“spring.datasource.schema:classpath:org/springframework/security/core/userdetails/jdbc/users.ddl”
      *
      * @param dataSource
      * @return
      */
-    @Bean
-    UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("USER", "ADMIN")
-                .build();
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.createUser(user);
-        jdbcUserDetailsManager.createUser(admin);
-        return jdbcUserDetailsManager;
-    }
+    // @Bean
+    // UserDetailsManager users(DataSource dataSource) {
+    //     UserDetails user = User.builder()
+    //             .username("user")
+    //             .password(passwordEncoder().encode("user"))
+    //             .roles("USER")
+    //             .build();
+    //     UserDetails admin = User.builder()
+    //             .username("admin")
+    //             .password(passwordEncoder().encode("admin"))
+    //             .roles("USER", "ADMIN")
+    //             .build();
+    //     JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+    //     jdbcUserDetailsManager.createUser(user);
+    //     jdbcUserDetailsManager.createUser(admin);
+    //     return jdbcUserDetailsManager;
+    // }
 
     /**
      * 配置HTTP请求（哪些URL需要哪些权限、表单登录认证还是HTTP Basic认证、注销）
