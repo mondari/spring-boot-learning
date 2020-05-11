@@ -22,7 +22,7 @@
    
       
    
-   2. client_credentials客户端模式（以该方式授权是没有身份信息的）：
+   2. client_credentials客户端模式（以该方式授权是没有身份信息的，且没有 refresh_token）：
    
       POST http://localhost:8080/oauth/token&grant_type=client_credentials&client_id=appId&client_secret=appSecret&scope=any
    
@@ -74,7 +74,7 @@
 
    2. GET http://localhost:8080/res/user/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
 
-      ```json
+      ```
       hello user
       ```
       
@@ -82,7 +82,7 @@
       
    
 3. 使用 refresh_token 刷新 access_token
-   POST http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=f9937e92-8851-4279-af34-42f5c00256f4&client_id=userClientId&client_secret=user
+   POST http://localhost:8080/oauth/token?grant_type=refresh_token&refresh_token=f9937e92-8851-4279-af34-42f5c00256f4&client_id=appId&client_secret=appSecret
 
 ## 参考
 

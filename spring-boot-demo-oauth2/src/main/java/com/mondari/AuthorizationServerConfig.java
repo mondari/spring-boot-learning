@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -43,6 +44,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    UserDetailsService userDetailsService;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -93,6 +96,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(tokenStore)
                 // 如果配置了授权方式为密码模式，必须设置这个
                 .authenticationManager(authenticationManager)
+                // 需要加这个，不然在 refresh_token 时会提示 "UserDetailsService is required" 错误
+                .userDetailsService(userDetailsService)
         ;
 
     }
