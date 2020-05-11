@@ -48,7 +48,7 @@
         <module>spring-boot-demo-security-jdbc</module>
         <module>spring-boot-demo-security-user-details-service</module>
         <module>spring-boot-demo-security-json</module>
-        <module>spring-boot-demo-security-jwt</module>
+        <module>spring-boot-demo-oauth2-jwt</module>
         <module>spring-boot-demo-oauth2</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-demo-websocket-handler</module>
