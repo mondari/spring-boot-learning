@@ -1,0 +1,22 @@
+# 参考文档：https://springdoc.org/
+springdoc:
+  swagger-ui:
+    # 一般在网关服务打开，非网关服务关闭
+    # 在网关中配置swagger-ui，see https://springdoc.org/#how-can-i-agreagte-external-endpoints-exposing-openapi-3-spec-inside-one-single-application
+    # IDE会提示没有 springdoc.swagger-ui.enabled 选项，其实是有的，see https://springdoc.org/#how-can-i-disableenable-swagger-ui-generation-based-on-env-variable
+    enabled: true
+    # 显示每次“Try it out”下的请求时长
+    display-request-duration: true
+    # It can be 'alpha' (sort by paths alphanumerically), 'method' (sort by HTTP method)
+    operationsSorter: method
+    groups-order: asc
+  # 显示 actuator 的接口
+  show-actuator: true
+  # 一般在网关中才配置该功能，设置每个服务一个分组
+  group-configs:
+    - group: actuator
+      paths-to-match: /actuator/**
+    - group: hello
+      paths-to-match: /hello/**
+    - group: world
+      paths-to-match: /world/**

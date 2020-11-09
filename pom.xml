@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
     </parent>
 
     <properties>
@@ -34,6 +34,7 @@
         <redisson.version>3.12.2</redisson.version>
         <spring-security-oauth2-autoconfigure.version>2.2.5.RELEASE</spring-security-oauth2-autoconfigure.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <springdoc.version>1.4.8</springdoc.version>
     </properties>
 
     <modules>
@@ -48,6 +49,7 @@
         <module>spring-boot-demo-security-jdbc</module>
         <module>spring-boot-demo-security-user-details-service</module>
         <module>spring-boot-demo-security-json</module>
+        <module>spring-boot-demo-springdoc</module>
         <module>spring-boot-demo-oauth2-jwt</module>
         <module>spring-boot-demo-oauth2</module>
         <module>spring-boot-demo-webflux</module>
@@ -84,12 +86,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
