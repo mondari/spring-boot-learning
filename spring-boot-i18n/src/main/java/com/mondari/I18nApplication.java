@@ -37,7 +37,7 @@ public class I18nApplication {
             // Spring 的 MessageSource 其实是对 JDK 中的 ResourceBundle 进行了封装
             // 以下代码来自JDK官方教程：https://docs.oracle.com/javase/tutorial/i18n/intro/steps.html
             System.out.println("----ResourceBundle----");
-            ResourceBundle bundle = ResourceBundle.getBundle("bundle.MessagesBundle", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle("i18n.messages", locale);
             System.out.println(bundle.getString("greetings"));
             System.out.println(bundle.getString("inquiry"));
             System.out.println(bundle.getString("farewell"));
