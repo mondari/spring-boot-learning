@@ -54,6 +54,7 @@
         <module>spring-boot-demo-webflux</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-demo-websocket-handler</module>
+        <module>spring-boot-demo-transaction</module>
         <module>spring-boot-i18n</module>
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
