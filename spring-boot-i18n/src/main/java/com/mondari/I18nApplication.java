@@ -1,47 +1,60 @@
 package com.mondari;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.LocaleResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+@RestController
 @SpringBootApplication
 public class I18nApplication {
+
+    public static final String KEY_GREETINGS = "greetings";
+    public static final String KEY_INQUIRY = "inquiry";
+    public static final String KEY_FAREWELL = "farewell";
+    public static final String KEY_MESSAGE_SOURCE = "MessageSource";
+    public static final String KEY_RESOURCE_BUNDLE = "ResourceBundle";
+
+    @Autowired
+    LocaleResolver localeResolver;
+
+    @Autowired
+    MessageSource messageSource;
 
     public static void main(String[] args) {
         SpringApplication.run(I18nApplication.class, args);
     }
 
-    /**
-     * Spring Boot 自动配置 MessageSource，类型为ResourceBundleMessageSource
-     * @param messageSource
-     * @return
-     */
-    @Bean
-    CommandLineRunner run(MessageSource messageSource) {
-        return args -> {
-            Locale locale = Locale.getDefault();
+    @GetMapping
+    public Map<String, Object> get(HttpServletRequest request) {
+        Locale locale = localeResolver.resolveLocale(request);
 
-            // 默认国际化文件的 basename 为 “messages”，可以在配置里修改为其他名称
-            // 如果国际化文件不在 resources 资源文件夹的根目录，而是放在i18n文件夹下，则 basename 应该改为 “i18n.messages”
-            System.out.println("----MessageSource----");
-            System.out.println(messageSource.getMessage("greetings", new Object[]{"boys", "girls"}, locale));
-            System.out.println(messageSource.getMessage("inquiry", null, locale));
-            System.out.println(messageSource.getMessage("farewell", null, locale));
-            System.out.println(messageSource.getMessage("error", null, locale));
+        Map<String, Object> sourceMap = new HashMap<>();
+        sourceMap.put(KEY_GREETINGS, messageSource.getMessage(KEY_GREETINGS, new Object[]{"boys", "girls"}, locale));
+        sourceMap.put(KEY_INQUIRY, messageSource.getMessage(KEY_INQUIRY, null, locale));
+        sourceMap.put(KEY_FAREWELL, messageSource.getMessage(KEY_FAREWELL, null, locale));
 
-            // Spring 的 MessageSource 其实是对 JDK 中的 ResourceBundle 进行了封装
-            // 以下代码来自JDK官方教程：https://docs.oracle.com/javase/tutorial/i18n/intro/steps.html
-            System.out.println("----ResourceBundle----");
-            ResourceBundle bundle = ResourceBundle.getBundle("i18n.messages", locale);
-            System.out.println(bundle.getString("greetings"));
-            System.out.println(bundle.getString("inquiry"));
-            System.out.println(bundle.getString("farewell"));
-        };
+        // Spring 的 MessageSource 其实是对 JDK 中的 ResourceBundle 进行了封装
+        // 以下代码参考JDK官方教程：https://docs.oracle.com/javase/tutorial/i18n/intro/steps.html
+        Map<String, Object> bundleMap = new HashMap<>();
+        ResourceBundle bundle = ResourceBundle.getBundle("i18n.messages", locale);
+        bundleMap.put(KEY_GREETINGS, bundle.getString(KEY_GREETINGS));
+        bundleMap.put(KEY_INQUIRY, bundle.getString(KEY_INQUIRY));
+        bundleMap.put(KEY_FAREWELL, bundle.getString(KEY_FAREWELL));
+
+        Map<String, Object> i18nMap = new HashMap<>();
+        i18nMap.put(KEY_MESSAGE_SOURCE, sourceMap);
+        i18nMap.put(KEY_RESOURCE_BUNDLE, bundleMap);
+        return i18nMap;
     }
 
 }

@@ -1,0 +1,4 @@
+###
+GET http://localhost:8080/?lang=zh
+Accept-Language: zh;q=0.9,en-US;q=0.8,de;q=0.7
+lang: zh
