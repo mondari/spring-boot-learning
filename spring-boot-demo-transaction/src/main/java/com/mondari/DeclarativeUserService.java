@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * <p>
- *
+ * 声明式事务
  * </p>
  *
  * @author limondar
@@ -27,6 +27,27 @@ public class DeclarativeUserService implements IUserService {
         return jdbcTemplate.queryForList("SELECT * FROM USER");
     }
 
+    /**
+     * 声明式事务入口及执行流程
+     * <p>
+     * {@link org.springframework.transaction.interceptor.TransactionInterceptor#invoke TransactionInterceptor.invoke()}-->
+     * <br>
+     * {@link org.springframework.transaction.interceptor.TransactionAspectSupport#invokeWithinTransaction TransactionAspectSupport.invokeWithinTransaction()}-->
+     * <br>
+     * {@link org.springframework.transaction.interceptor.TransactionAspectSupport#createTransactionIfNecessary TransactionAspectSupport.createTransactionIfNecessary()}-->
+     * <br>
+     * {@link org.springframework.transaction.support.AbstractPlatformTransactionManager#getTransaction AbstractPlatformTransactionManager.getTransaction()}-->
+     * <br>
+     * {@link org.springframework.jdbc.datasource.DataSourceTransactionManager#doGetTransaction DataSourceTransactionManager.doGetTransaction()}-->
+     * <br>
+     * {@link org.springframework.transaction.interceptor.TransactionAspectSupport.InvocationCallback#proceedWithInvocation InvocationCallback.proceedWithInvocation()}-->
+     * <br>
+     * {@link org.springframework.aop.framework.ReflectiveMethodInvocation#proceed ReflectiveMethodInvocation.proceed()}-->
+     * <br>
+     * {@link org.springframework.transaction.interceptor.TransactionAspectSupport#commitTransactionAfterReturning TransactionAspectSupport.commitTransactionAfterReturning()}
+     *
+     * @param usernames
+     */
     @Override
     public void insertUsers(String... usernames) {
         for (String username : usernames) {

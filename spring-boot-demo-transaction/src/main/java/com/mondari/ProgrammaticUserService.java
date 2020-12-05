@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * <p>
- *
+ * 编程式事务
  * </p>
  *
  * @author limondar
@@ -32,6 +32,8 @@ public class ProgrammaticUserService implements IUserService {
 
     /**
      * TransactionTemplate 其实是使用 PlatformTransactionManager 来管理事务
+     * <br>
+     * PlatformTransactionManager 定义了事务的创建、提交和回滚三个状态
      */
     @Autowired
     TransactionTemplate transactionTemplate;
