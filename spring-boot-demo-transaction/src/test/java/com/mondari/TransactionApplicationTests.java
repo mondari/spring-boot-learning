@@ -71,7 +71,7 @@ class TransactionApplicationTests {
     @BeforeEach
     void init() {
         log.info("------BeforeEach------");
-        declarativeUserService.truncateUser();
+        programmaticUserService.truncateUser();
         log.info("----End BeforeEach----");
     }
 
