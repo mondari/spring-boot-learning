@@ -14,13 +14,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class AopApplicationTests {
+class AopApplicationTests {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void contextLoads() throws Exception {
+    void contextLoads() throws Exception {
         this.mockMvc.perform(get("/hello"))
                 .andDo(print())
                 .andExpect(status().isOk())
