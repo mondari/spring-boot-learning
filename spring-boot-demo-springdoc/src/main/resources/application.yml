@@ -1,5 +1,6 @@
 # 参考文档：https://springdoc.org/
 springdoc:
+  version: 'Application version:@version@, Spring Boot Version:@parent.parent.version@'
   swagger-ui:
     # 一般在网关服务打开，非网关服务关闭
     # 在网关中配置swagger-ui，see https://springdoc.org/#how-can-i-agreagte-external-endpoints-exposing-openapi-3-spec-inside-one-single-application

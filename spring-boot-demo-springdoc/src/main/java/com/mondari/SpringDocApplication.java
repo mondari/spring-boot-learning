@@ -1,5 +1,6 @@
 package com.mondari;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,10 @@ import java.net.UnknownHostException;
 
 @RestController
 @SpringBootApplication
-public class SwaggerApplication {
+public class SpringDocApplication {
+
+    @Value("${springdoc.version}")
+    String appVersion;
 
     @GetMapping("/world")
     public String world(ServletRequest httpRequest) {
@@ -30,11 +34,11 @@ public class SwaggerApplication {
         } catch (UnknownHostException e) {
             localhost = "localhost";
         }
-        return "Hello springdoc\n\n——from " + localhost + ":" + httpRequest.getLocalPort();
+        return "Hello springdoc\n\n——from " + localhost + ":" + httpRequest.getLocalPort() + ", " + appVersion;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(SwaggerApplication.class, args);
+        SpringApplication.run(SpringDocApplication.class, args);
     }
 
 }
