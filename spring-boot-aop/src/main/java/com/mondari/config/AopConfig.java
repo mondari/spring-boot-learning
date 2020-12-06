@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 /**
  * AOP切面配置类
+ *
+ * @author limondar
  */
 @Aspect
 @Component
@@ -24,16 +26,16 @@ public class AopConfig {
         LOG.info("-----Before-----");
 
         // 切点表达式：execution(public java.lang.String com.mondari.AopApplication.hello())
-        System.out.println("切点表达式：" + pjp.toLongString());
+        LOG.info("切点表达式：" + pjp.toLongString());
 
         // 切点的签名：public java.lang.String com.mondari.AopApplication.hello()
-        System.out.println("切点的签名：" + pjp.getSignature().toLongString());
+        LOG.info("切点的签名：" + pjp.getSignature().toLongString());
 
         // 切点目标对象：com.mondari.AopApplication$$EnhancerBySpringCGLIB$$4f6e9dba@7f6a1d1f
-        System.out.println("切点目标对象：" + pjp.getTarget().toString());
+        LOG.info("切点目标对象：" + pjp.getTarget().toString());
 
         // 切点的传参：[]
-        System.out.println("切点的传参：" + Arrays.toString(pjp.getArgs()));
+        LOG.info("切点的传参：" + Arrays.toString(pjp.getArgs()));
 
         // 开始时间
         long startTime = System.currentTimeMillis();
