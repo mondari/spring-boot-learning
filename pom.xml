@@ -39,8 +39,8 @@
 
     <modules>
         <module>spring-boot-actuator</module>
-        <module>spring-boot-aop</module>
         <module>spring-boot-docker</module>
+        <module>spring-boot-demo-aop</module>
         <module>spring-boot-demo-caching</module>
         <module>spring-boot-demo-caching-redisson</module>
         <module>spring-boot-demo-elasticsearch</module>
