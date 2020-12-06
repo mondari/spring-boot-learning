@@ -44,6 +44,7 @@ public class ProxyApplication {
         // AOP 代理
         System.out.println("\nAOP 代理：");
         ProxyFactory proxyFactory = new ProxyFactory();
+        // 设置目标类
         proxyFactory.setTarget(targetObject);
         // 添加AOP通知
         proxyFactory.addAdvice(new MyAdviceInterceptor());

@@ -5,7 +5,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * <p>
- *
+ * 自定义环绕通知拦截器
  * </p>
  *
  * @author limondar
