@@ -39,9 +39,9 @@ class I18nApplicationTests {
         this.mockMvc.perform(get("/").locale(Locale.CHINA))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.MessageSource.inquiry").value("最近过得怎样？"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.MessageSource.greetings").value("你好.boys and girls"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.MessageSource.farewell").value("再见."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ResourceBundle.inquiry").value("最近过得怎样？"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ResourceBundle.greetings").value("你好.boys and girls"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ResourceBundle.farewell").value("再见."))
         ;
     }
 
