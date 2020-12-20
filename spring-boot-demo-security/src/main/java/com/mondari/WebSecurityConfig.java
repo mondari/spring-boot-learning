@@ -3,7 +3,6 @@ package com.mondari;
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import java.io.PrintWriter;
 
 /**
  * <p>
@@ -30,6 +27,12 @@ import java.io.PrintWriter;
  */
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final String USERNAME_USER = "user";
+    public static final String USERNAME_ADMIN = "admin";
+    public static final String ROLE_USER = "USER";
+    public static final String ROLE_ADMIN = "ADMIN";
+
     /**
      * 使用新版的 PasswordEncoder->DelegatingPasswordEncoder 取代 BCryptPasswordEncoder
      *
@@ -49,10 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder().encode("user")).roles("USER").and()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin")).roles("USER", "ADMIN");
+                .withUser(USERNAME_USER)
+                .password(passwordEncoder().encode(USERNAME_USER)).roles(ROLE_USER).and()
+                .withUser(USERNAME_ADMIN)
+                .password(passwordEncoder().encode(USERNAME_ADMIN)).roles(ROLE_USER, ROLE_ADMIN);
     }
 
     /**
@@ -63,13 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER")
+        UserDetails user = User.withUsername(USERNAME_USER)
+                .password(passwordEncoder().encode(USERNAME_USER))
+                .roles(ROLE_USER)
                 .build();
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("USER", "ADMIN")
+        UserDetails admin = User.withUsername(USERNAME_ADMIN)
+                .password(passwordEncoder().encode(USERNAME_ADMIN))
+                .roles(ROLE_USER, ROLE_ADMIN)
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }
@@ -80,54 +83,62 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param http
      * @throws Exception
      */
+    @SuppressWarnings("AlibabaAvoidCommentBehindStatement")
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // 1-> 设置哪些接口的请求需要授权
-                .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")// “/admin”开头的接口需要ADMIN角色
-                .antMatchers("/**").hasRole("USER")// “/”开头的接口需要USER角色
-                .anyRequest().authenticated() // 剩余其它接口，认证通过后才能访问
-                .and()
-                // 2-> 配置表单登录认证
-                .formLogin()
-                .usernameParameter("username")// 定义登录时用户名的key，默认是username
-                .passwordParameter("password")// 定义登陆时密码的key，默认是password
-                // 登录成功操作
-                .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write("login success");
-                    out.flush();
-                })
-                // 登录失败操作
-                .failureHandler((httpServletRequest, httpServletResponse, e) -> {
-                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write("login failure");
-                    out.flush();
-                })
-                .and()
+                // 1-> 配置接口权限
+                .authorizeRequests(authorizeRequests ->
+                        authorizeRequests.antMatchers("/admin/**").hasRole(ROLE_ADMIN) // “/admin”开头的接口需要ADMIN角色
+                                .antMatchers("/", "/error", "/webjars/**").permitAll() // 这些接口不需要认证
+                                .anyRequest().authenticated() // 其余接口，认证通过才能访问，但不需要授权
+                )
+                // 2-> 配置表单登录
+                .formLogin(formLogin ->
+                                formLogin.usernameParameter("username") // 表单登录的用户名参数，默认取 username 参数
+                                        .passwordParameter("password") // 表单登录的密码参数，默认取 password 参数
+                                        // .loginPage("/login") // 登录页URL，默认是 GET /login。如果用系统自带的登录页，则注释掉该行代码
+                                        .loginProcessingUrl("/login") // 处理登录接口URL，默认是 POST /login
+                                        // .successForwardUrl("/") // 登录成功跳转URL，该接口需要支持 POST 请求。默认会跳转到登录前地址
+                                        .failureUrl("/login?error") // 登录失败跳转URL，默认是 /login?error
+                        // 登录成功操作(会覆盖上面的 successForwardUrl 设置。适合前后端分离场景）
+                        // .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                        //     httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        //     PrintWriter out = httpServletResponse.getWriter();
+                        //     out.write("login success");
+                        //     out.flush();
+                        // })
+                        // // 登录失败操作(会覆盖上面的 failureUrl 设置。适合前后端分离场景）
+                        // .failureHandler((httpServletRequest, httpServletResponse, e) -> {
+                        //     httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        //     PrintWriter out = httpServletResponse.getWriter();
+                        //     out.write("login failure");
+                        //     out.flush();
+                        // })
+                )
                 // 3-> 配置注销
-                .logout()
-                .logoutUrl("/logout")// 默认值
-                .invalidateHttpSession(true)// 默认值
-                .clearAuthentication(true)// 默认值
-                // 注销成功操作(设置后，上面的 logoutSuccessUrl 设置会被忽略）
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    PrintWriter out = httpServletResponse.getWriter();
-                    out.write("logout success");
-                    out.flush();
-                })
-                .and()
+                .logout(logout ->
+                                logout.logoutUrl("/logout")// 注销接口URL默认值
+                                        // .logoutSuccessUrl("/")// 注销成功跳转URL，默认是 /login?logout
+                                        .invalidateHttpSession(true)// 默认值
+                                        .clearAuthentication(true)// 默认值
+                        // 注销成功操作(会覆盖上面的 logoutSuccessUrl 设置。适合前后端分离场景）
+                        // .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                        //     httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        //     PrintWriter out = httpServletResponse.getWriter();
+                        //     out.write("logout success");
+                        //     out.flush();
+                        // })
+                )
                 // 4-> 配置 HTTP Basic 认证
                 .httpBasic()
                 .and()
                 // 5->  关闭csrf。踩坑记录：不关闭的话使用postman测试需要添加csrf参数，否则出错
                 .csrf().disable()
                 // 6-> 配置session管理
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
         ;
 
     }

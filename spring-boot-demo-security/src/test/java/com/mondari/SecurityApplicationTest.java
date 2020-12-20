@@ -1,20 +1,25 @@
 package com.mondari;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.wildfly.common.Assert;
 
-@RunWith(SpringRunner.class)
-public class SecurityApplicationTest {
+class SecurityApplicationTest {
 
+    @DisplayName("比较密码")
     @Test
-    public void comparePassword() {
+    void comparePassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "user";
         String encodedPassword = encoder.encode(rawPassword);
         Assert.assertTrue(encoder.matches(rawPassword, encodedPassword));
+
+        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        encodedPassword = delegatingPasswordEncoder.encode(rawPassword);
+        Assert.assertTrue(delegatingPasswordEncoder.matches(rawPassword, encodedPassword));
     }
 
 }
