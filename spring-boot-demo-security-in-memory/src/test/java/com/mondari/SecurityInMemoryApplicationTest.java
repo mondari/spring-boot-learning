@@ -7,7 +7,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wildfly.common.Assert;
 
-class SecurityApplicationTest {
+class SecurityInMemoryApplicationTest {
 
     @DisplayName("比较密码")
     @Test

@@ -11,8 +11,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
-        <!--<version>2.3.4.RELEASE</version>-->
+        <!--<version>2.4.0</version>-->
+        <version>2.3.4.RELEASE</version>
     </parent>
 
     <properties>
@@ -46,7 +46,7 @@
         <module>spring-boot-demo-caching-redisson</module>
         <module>spring-boot-demo-elasticsearch</module>
         <module>spring-boot-demo-i18n</module>
-        <module>spring-boot-demo-security</module>
+        <module>spring-boot-demo-security-in-memory</module>
         <module>spring-boot-demo-security-jdbc</module>
         <module>spring-boot-demo-security-user-details-service</module>
         <module>spring-boot-demo-security-json</module>
@@ -96,6 +96,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
