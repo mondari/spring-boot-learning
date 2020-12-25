@@ -3,6 +3,7 @@ package com.mondari;
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,6 +42,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    /**
+     * 默认 AuthenticationManager 是无法通过 @Autowired 注入的，需要手动暴露出来
+     *
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     /**
@@ -130,15 +143,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         //     out.flush();
                         // })
                 )
-                // 4-> 配置 HTTP Basic 认证
+                // 4-> 配置 HTTP 基本认证（一般不用）
                 .httpBasic()
                 .and()
-                // 5->  关闭csrf。踩坑记录：不关闭的话使用postman测试需要添加csrf参数，否则出错
+                // 5->  关闭csrf（默认）。跨站请求伪造防御一般不开启，因为需要和前端配合使用。
+                // 且在前后端分离的环境下，无法通过cookie或session保存csrfToken。
+                // 踩坑记录：不关闭的话使用postman测试需要添加csrf参数，否则出错。
                 .csrf().disable()
                 // 6-> 配置session管理
                 .sessionManagement(sessionManagement ->
+                        // 默认是 IF_REQUIRED。如果是前后端分离，基于 token 实现有状态，则改为 STATELESS
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
+                // 7-> 配置跨域
+                .cors()
+                .and()
+                // 8-> 添加 Security 头到响应
+                .headers()
         ;
 
     }
