@@ -80,6 +80,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--spring-boot 2.3 不再包含该依赖，需要手动加入-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -97,6 +98,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
+                <!--去掉JUnit4兼容-->
                 <exclusion>
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
