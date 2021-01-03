@@ -1,10 +1,13 @@
 package com.mondari;
 
 import org.springframework.boot.autoconfigure.security.servlet.WebSecurityEnablerConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * <p>
@@ -19,15 +22,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    这段代码不要也行，只要customUserDetailsServiceImpl是bean即可
-//    @Autowired
-//    UserDetailsService customUserDetailsServiceImpl;
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(customUserDetailsServiceImpl).passwordEncoder(passwordEncoder())
-//        ;
-//    }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    // 下面这段代码不要也行，只要自定义UserDetailsService是bean即可，Security会自动从容器中找到所需的Bean去配置
+    // @Autowired
+    // UserDetailsService customUserDetailsServiceImpl;
+    //
+    // @Override
+    // protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    //     auth.userDetailsService(customUserDetailsServiceImpl).passwordEncoder(passwordEncoder());
+    // }
+    // 上面这段代码不要也行
 
     /**
      * 配置HTTP请求（哪些URL需要哪些权限、表单登录认证还是HTTP Basic认证、注销）
@@ -49,6 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 3->  关闭csrf
                 .csrf().disable()
+                // 4-> 配置表单登录
+                .formLogin()
         ;
 
     }
