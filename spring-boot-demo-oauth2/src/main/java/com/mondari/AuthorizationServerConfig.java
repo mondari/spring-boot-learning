@@ -78,6 +78,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                         GRANT_TYPE_CLIENT_CREDENTIALS,
                         GRANT_TYPE_IMPLICIT,
                         GRANT_TYPE_REFRESH_TOKEN)
+                // 授权码模式和密码模式不需要该配置，客户端模式和隐式模式需要
                 .authorities("ROLE_USER")
                 // 如果配置了授权方式为授权码模式，必须设置这个
                 .redirectUris("http://mrbird.cc")
