@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
  * 授权服务器配置
  * </p>
  * 建议参考自动配置类：{@link org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration}
+ * 在引入@EnableAuthorizationServer注解，但是没有添加自定义AuthorizationServerConfigurerAdapter实现的情况下，
+ * 框架会使用上面的自动配置类来配置授权服务器
  *
  * @author limondar
  * @date 2020/3/6

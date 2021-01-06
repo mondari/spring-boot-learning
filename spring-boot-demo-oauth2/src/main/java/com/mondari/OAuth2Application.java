@@ -14,22 +14,22 @@ import java.security.Principal;
  */
 @RestController
 @SpringBootApplication
-public class Oauth2Application {
+public class OAuth2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Oauth2Application.class);
+        SpringApplication.run(OAuth2Application.class);
     }
 
-    /**
-     * 认证通过的都可以访问
-     *
-     * @return
-     */
-    @GetMapping("/hello")
+    @GetMapping(value = {"/hello", "/"})
     public String hello() {
         return "hello";
     }
 
+    /**
+     * 认证通过的即可访问
+     *
+     * @return
+     */
     @GetMapping(value = "/principal")
     public Principal getUser(Principal principal) {
         return principal;
@@ -40,7 +40,7 @@ public class Oauth2Application {
      *
      * @return
      */
-    @GetMapping("/user/hello")
+    @GetMapping("/user")
     public String user(@AuthenticationPrincipal(expression = "username") String name) {
         return "hello " + name;
     }
@@ -50,28 +50,39 @@ public class Oauth2Application {
      *
      * @return
      */
-    @GetMapping("/admin/hello")
+    @GetMapping("/admin")
     public String admin(@AuthenticationPrincipal(expression = "username") String name) {
         return "hello " + name;
     }
 
     /**
-     * USER权限的用户可以访问
+     * 资源服务器管理的 URI，USER权限的用户可以访问
      *
      * @return
      */
-    @GetMapping("/res/user/hello")
+    @GetMapping("/res/user")
     public String userResource(@AuthenticationPrincipal(expression = "username") String name) {
         return "hello " + name;
     }
 
     /**
-     * ADMIN权限的用户可以访问
+     * 资源服务器管理的 URI，ADMIN权限的用户可以访问
      *
      * @return
      */
-    @GetMapping("/res/admin/hello")
+    @GetMapping("/res/admin")
     public String adminResource(@AuthenticationPrincipal(expression = "username") String name) {
         return "hello " + name;
+    }
+
+    /**
+     * 资源服务器管理的 URI，同时也是远程资源服务器 UserInfoUri
+     *
+     * @param principal
+     * @return
+     */
+    @GetMapping("/res/me")
+    public Principal getPrincipal(Principal principal) {
+        return principal;
     }
 }

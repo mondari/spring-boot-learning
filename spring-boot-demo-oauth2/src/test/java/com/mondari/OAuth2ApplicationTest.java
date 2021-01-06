@@ -1,15 +1,12 @@
 package com.mondari;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-public class Oauth2ApplicationTest {
+class OAuth2ApplicationTest {
 
     @Test
-    public void encodedPassword() {
+    void encodedPassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "user";
         String encodedPassword = encoder.encode(rawPassword);

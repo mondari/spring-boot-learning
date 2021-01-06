@@ -61,7 +61,7 @@
    
 2. 访问资源（以user身份获取的access_token访问）：
 
-   1. GET http://localhost:8080/res/admin/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
+   1. GET http://localhost:8080/res/admin?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
 
       ```json
       {
@@ -72,7 +72,7 @@
 
       
 
-   2. GET http://localhost:8080/res/user/hello?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
+   2. GET http://localhost:8080/res/user?access_token=fc59a990-3adc-4b7d-9177-40f310487d35
 
       ```
       hello user

@@ -63,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 1-> 设置哪些接口的请求需要授权
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")// “/admin”开头的接口需要ADMIN角色
-                .antMatchers("/**").hasRole("USER")// “/”开头的接口需要USER角色
+                .antMatchers("/user/**").hasRole("USER")// “/user”开头的接口需要USER角色
+                .antMatchers("/", "/hello").permitAll()
                 .anyRequest().authenticated() // 剩余其它接口，认证通过后才能访问
                 .and()
                 // 2-> 配置表单登录认证

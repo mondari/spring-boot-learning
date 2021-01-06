@@ -19,10 +19,10 @@ client.g
 %}
 
 ### 2.访问受保护资源（USER权限的用户可以访问）
-GET http://localhost:8080/res/user/hello?access_token={{access_token}}
+GET http://localhost:8080/res/user?access_token={{access_token}}
 
 ### 3.访问受保护资源（ADMIN权限的用户可以访问）
-GET http://localhost:8080/res/admin/hello?access_token={{access_token}}
+GET http://localhost:8080/res/admin?access_token={{access_token}}
 
 ### 4.使用 refresh_token 刷新 access_token
 POST http://localhost:8080/oauth/token?grant_type=refresh_token&client_id=appId&client_secret=appSecret&refresh_token={{refresh_token}}
