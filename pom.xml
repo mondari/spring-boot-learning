@@ -36,6 +36,7 @@
         <spring-security-oauth2-autoconfigure.version>2.2.5.RELEASE</spring-security-oauth2-autoconfigure.version>
         <jjwt.version>0.9.1</jjwt.version>
         <springdoc.version>1.4.8</springdoc.version>
+        <dockerfile-maven.version>1.4.10</dockerfile-maven.version>
     </properties>
 
     <modules>
@@ -53,6 +54,8 @@
         <module>spring-boot-demo-springdoc</module>
         <module>spring-boot-demo-oauth2-jwt</module>
         <module>spring-boot-demo-oauth2</module>
+        <module>spring-boot-demo-oauth2-resource-server</module>
+        <module>spring-boot-demo-oauth2-authorization-server</module>
         <module>spring-boot-demo-webflux</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-demo-websocket-handler</module>
@@ -261,7 +264,7 @@
                 <plugin>
                     <groupId>com.spotify</groupId>
                     <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>1.4.10</version>
+                    <version>${dockerfile-maven.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
