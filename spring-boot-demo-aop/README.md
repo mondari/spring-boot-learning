@@ -30,6 +30,19 @@
 
 https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#aop-introduction-defn
 
+## 核心类
+
+org.aopalliance.aop.Advice 接口：即上面所说的“通知”
+
+org.springframework.aop.Pointcut：即上面所说的“切入点”
+
+org.aopalliance.intercept.Joinpoint：即上面所说的“连接点”
+
+org.springframework.aop.Advisor 接口：持有一个 advice 和一个 pointcut 用来判断能否执行这个 advice。有 PointcutAdvisor 和 IntroductionAdvisor
+两个子接口
+
+org.springframework.aop.framework.Advised 接口：
+
 ## AOP 切入点表达式
 
 - `execution`: 匹配方法

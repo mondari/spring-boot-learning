@@ -1,0 +1,12 @@
+server:
+  port: 9999
+security:
+  oauth2:
+    client:
+      client-id: appId
+    resource:
+      id: resource-server
+      #选择使用 tokenInfoUri 还是 userInfoUri 去验证身份
+      prefer-token-info: false
+      token-info-uri: http://localhost:8080/oauth/check_token
+      user-info-uri: http://localhost:8080/res/me

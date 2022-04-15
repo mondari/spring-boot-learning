@@ -2,7 +2,6 @@ package com.mondari;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +10,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * <p>
@@ -34,11 +32,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public static final String GRANT_TYPE_IMPLICIT = "implicit"; // 简化模式
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 
-    /**
-     * 用来配置TokenStore，将 access_token 存到 redis 中
-     */
-    @Autowired
-    RedisConnectionFactory redisConnectionFactory;
     @Autowired
     PasswordEncoder passwordEncoder;
     /**
@@ -85,7 +78,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 如果配置了授权方式为授权码模式，必须设置这个
                 .redirectUris("http://mrbird.cc")
                 // 资源ID
-                .resourceIds(ResourceServerConfig.RESOURCE_ID, "resource-server")
+                .resourceIds("rid", "resource-server")
                 // 授权域
                 .scopes("any")
         ;
@@ -93,10 +86,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
-        // 设置前缀为项目名
-        tokenStore.setPrefix("security-oauth2:");
-        endpoints.tokenStore(tokenStore)
+        endpoints
                 // 如果配置了授权方式为密码模式，必须设置这个
                 .authenticationManager(authenticationManager)
                 // 需要加这个，不然在 refresh_token 时会提示 "UserDetailsService is required" 错误

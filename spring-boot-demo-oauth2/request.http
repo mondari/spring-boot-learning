@@ -30,3 +30,10 @@ POST http://localhost:8080/oauth/token?grant_type=refresh_token&client_id=appId&
 #Accept: application/json
 #
 #username=user&password=user
+
+### 访问远程资源服务器（query入参传token）
+GET http://localhost:9999/resource?access_token={{access_token}}
+
+### 访问远程资源服务器（请求头入参传token）
+GET http://localhost:9999/resource
+Authorization: Bearer {{access_token}}

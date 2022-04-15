@@ -3,10 +3,10 @@ package com.mondari;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class SecurityUserDetailsServiceApplicationTest {
+class AuthorizationServerApplicationTest {
 
     @Test
-    public void encodedPassword() {
+    void encodedPassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "user";
         String encodedPassword = encoder.encode(rawPassword);
