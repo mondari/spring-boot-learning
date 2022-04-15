@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class SchedulerApplicationTests {
 
-	@Test
-	public void contextLoads() {
-		System.out.println("hello world");
-	}
+    @Test
+    public void contextLoads() {
+        System.out.println("hello world");
+    }
 
 }
