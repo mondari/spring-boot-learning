@@ -24,15 +24,6 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.10</version>
-                <!--配置mvn package的时候自动构建docker镜像-->
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <!--docker镜像仓库名-->
                     <repository>${project.groupId}/${project.artifactId}</repository>
