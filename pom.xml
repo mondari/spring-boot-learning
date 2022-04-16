@@ -39,25 +39,26 @@
 
     <modules>
         <module>spring-boot-demo-actuator</module>
-        <module>spring-boot-docker</module>
         <module>spring-boot-demo-aop</module>
         <module>spring-boot-demo-caching</module>
         <module>spring-boot-demo-caching-redisson</module>
         <module>spring-boot-demo-elasticsearch</module>
         <module>spring-boot-demo-i18n</module>
-        <module>spring-boot-demo-security-in-memory</module>
-        <module>spring-boot-demo-security-jdbc</module>
-        <module>spring-boot-demo-security-user-details-service</module>
-        <module>spring-boot-demo-security-json</module>
-        <module>spring-boot-demo-springdoc</module>
         <module>spring-boot-demo-oauth2-jwt</module>
         <module>spring-boot-demo-oauth2</module>
         <module>spring-boot-demo-oauth2-resource-server</module>
         <module>spring-boot-demo-oauth2-authorization-server</module>
+        <module>spring-boot-demo-security-in-memory</module>
+        <module>spring-boot-demo-security-jdbc</module>
+        <module>spring-boot-demo-security-json</module>
+        <module>spring-boot-demo-security-user-details-service</module>
+        <module>spring-boot-demo-springdoc</module>
+        <module>spring-boot-demo-transaction</module>
+        <module>spring-boot-demo-scheduler</module>
         <module>spring-boot-demo-webflux</module>
         <module>spring-boot-demo-websocket</module>
         <module>spring-boot-demo-websocket-handler</module>
-        <module>spring-boot-demo-transaction</module>
+        <module>spring-boot-docker</module>
         <module>spring-boot-jpa</module>
         <module>spring-boot-mongodb</module>
         <module>spring-boot-mybatis</module>
@@ -66,7 +67,6 @@
         <module>spring-boot-redis</module>
         <module>spring-boot-rest</module>
         <module>spring-boot-restdocs</module>
-        <module>spring-boot-scheduler</module>
     </modules>
 
     <!--项目中模块公用的依赖放在这里-->
