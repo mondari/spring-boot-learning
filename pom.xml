@@ -54,6 +54,7 @@
         <module>spring-boot-demo-security-user-details-service</module>
         <module>spring-boot-demo-springdoc</module>
         <module>spring-boot-demo-transaction</module>
+        <module>spring-boot-demo-upload</module>
         <module>spring-boot-demo-scheduler</module>
         <module>spring-boot-demo-webflux</module>
         <module>spring-boot-demo-websocket</module>

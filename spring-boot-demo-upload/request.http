@@ -1,0 +1,16 @@
+### upload file
+POST http://localhost:8080/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="request.http"
+
+< request.http
+--WebAppBoundary--
+
+### list files
+GET http://localhost:8080/files
+
+### download file
+GET http://localhost:8080/files/{{filename}}
+
