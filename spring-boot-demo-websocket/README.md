@@ -1,6 +1,7 @@
 # spring-boot-demo-websocket
 
-启动服务，打开浏览器，打开[WebSocket在线测试工具](http://www.websocket-test.com/)，连接 **wss://localhost:8443/chat/{你的昵称或用户ID}** 或 **wss://localhost:8443/chatroom/{房间号}/{你的昵称或用户ID}** 即可进行在线聊天
+启动服务，打开浏览器，打开 [WebSocket在线测试工具](http://www.websocket-test.com/) ，连接 **wss://localhost:8443/chat/{你的昵称或用户ID}** 或 **wss:
+//localhost:8443/chatroom/{房间号}/{你的昵称或用户ID}** 即可进行在线聊天
 
 ## 功能简介
 
@@ -51,7 +52,7 @@
    }
    ```
 
-   启动应用，访问 https://localhost:8443/hello，浏览器提示证书不安全，忽略掉后接口返回“hello”，说明HTTPS配置成功，也就是说WSS配置成功
+   启动应用，访问 https://localhost:8443/hello ，浏览器提示证书不安全，忽略掉后接口返回“hello”，说明HTTPS配置成功，也就是说WSS配置成功
 
 ## 参考
 

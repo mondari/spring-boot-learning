@@ -1,3 +1,4 @@
+#需要先访问https关闭浏览器警告，才能建立wss连接
 server:
   port: 8443
   ssl:
