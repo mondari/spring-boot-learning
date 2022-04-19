@@ -1,8 +1,8 @@
-#需要先访问https关闭浏览器警告，才能建立wss连接
+#开启SSL后需要先访问https关闭浏览器警告，才能建立wss连接
 server:
   port: 8443
   ssl:
-    enabled: true
+    enabled: false
     key-store: classpath:keystore.jks
     key-store-password: 123456
     key-password: 123456
